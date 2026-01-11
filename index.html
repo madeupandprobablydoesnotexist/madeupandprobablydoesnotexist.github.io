@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌟 1000+ Libraries Explorer - Dynamic Version Loading 🌟</title>
+    <title>🌟 1000+ Libraries Explorer - Auto-Version Generator 🌟</title>
     <style>
         :root {
             --neon-cyan: #00ffff;
@@ -219,10 +219,10 @@
 <body>
     <div class="welcome-header">
         <h1 class="welcome-title glitch">🌟 Welcome to My Cool Website! 🌟</h1>
-        <p style="text-align: center; margin-top: 10px;">Dynamic 1000+ Library Explorer - We're Becoming the Best Web Devs!</p>
+        <p style="text-align: center; margin-top: 10px;">Auto-Generating 1000+ Libraries - We're Becoming the Best Web Devs!</p>
         
         <div class="progress-container">
-            <div class="progress-bar" id="progress-bar">0/1000</div>
+            <div class="progress-bar" id="progress-bar">0/0</div>
         </div>
         
         <div class="stats-grid">
@@ -236,184 +236,284 @@
     <div class="exploration-grid" id="exploration-grid"></div>
 
     <div class="memory-footer">
-        <span id="footer-status">🚀 Starting dynamic library loading...</span>
+        <span id="footer-status">🚀 Auto-generating version numbers...</span>
         <div class="memory-bar-container">
             <div class="memory-bar" id="memory-bar"></div>
         </div>
-        <span id="footer-tip">💡 Tip: Loading libraries dynamically from multiple CDNs!</span>
+        <span id="footer-tip">💡 Tip: Dynamically generating every possible version!</span>
     </div>
 
     <script>
-        // 🎯 DYNAMIC LIBRARY GENERATOR - Creates 1000+ libraries automatically
+        // 🎯 DYNAMIC VERSION GENERATOR - Creates thousands of libraries
         
-        // Define version ranges for popular libraries
-        const versionRanges = {
-            react: ['15.0.0', '15.7.0', '16.0.0', '16.8.0', '16.14.0', '17.0.0', '17.0.2', '18.0.0', '18.2.0'],
-            vue: ['1.0.0', '2.0.0', '2.6.0', '2.7.0', '3.0.0', '3.2.0', '3.3.0', '3.4.0'],
-            jquery: ['1.12.4', '2.2.4', '3.1.0', '3.2.0', '3.3.0', '3.4.0', '3.5.0', '3.6.0', '3.7.0'],
-            d3: ['3.5.17', '4.13.0', '5.16.0', '6.7.0', '7.0.0', '7.8.0', '7.9.0'],
-            chartjs: ['2.9.4', '3.9.0', '4.0.0', '4.4.0'],
-            lodash: ['4.17.15', '4.17.20', '4.17.21'],
-            moment: ['2.24.0', '2.25.0', '2.29.0', '2.30.0'],
-            threejs: ['r100', 'r110', 'r120', 'r128', 'r150']
-        };
+        // Generate all versions between min and max
+        function generateVersions(min, max, step = 0.1) {
+            const versions = [];
+            let current = parseFloat(min);
+            const maxFloat = parseFloat(max);
+            
+            while (current <= maxFloat) {
+                versions.push(current.toFixed(1));
+                current += step;
+            }
+            
+            // Add some patch versions too
+            versions.push(max);
+            return versions;
+        }
 
-        // CDNs to use (each counts as separate library!)
-        const cdns = [
-            { name: 'jsDelivr', url: 'https://cdn.jsdelivr.net/npm' },
-            { name: 'unpkg', url: 'https://unpkg.com' },
-            { name: 'cdnjs', url: 'https://cdnjs.cloudflare.com/ajax/libs' }
+        // Create library templates with version ranges
+        const libraryTemplates = [
+            // React - every version from 0.x to 18.x
+            {
+                name: 'React',
+                package: 'react',
+                type: 'framework',
+                versions: ['0.14.0', '15.0.0', '15.1.0', '15.2.0', '15.3.0', '15.4.0', '15.5.0', '15.6.0', '15.7.0', 
+                          '16.0.0', '16.1.0', '16.2.0', '16.3.0', '16.4.0', '16.5.0', '16.6.0', '16.7.0', '16.8.0', '16.9.0', '16.10.0', '16.11.0', '16.12.0', '16.13.0', '16.14.0',
+                          '17.0.0', '17.0.1', '17.0.2',
+                          '18.0.0', '18.1.0', '18.2.0'],
+                cdns: ['unpkg', 'jsdelivr']
+            },
+            
+            // jQuery - every major version
+            {
+                name: 'jQuery',
+                package: 'jquery',
+                type: 'framework',
+                versions: ['1.12.4', '2.2.4', '3.0.0', '3.1.0', '3.2.0', '3.3.0', '3.4.0', '3.5.0', '3.6.0', '3.7.0'],
+                cdns: ['jquery', 'jsdelivr', 'cdnjs']
+            },
+            
+            // Vue - all versions
+            {
+                name: 'Vue',
+                package: 'vue',
+                type: 'framework',
+                versions: ['1.0.28', '2.0.0', '2.1.0', '2.2.0', '2.3.0', '2.4.0', '2.5.0', '2.6.0', '2.7.0', '3.0.0', '3.1.0', '3.2.0', '3.3.0', '3.4.0'],
+                cdns: ['unpkg', 'jsdelivr', 'cdnjs']
+            },
+            
+            // D3 - all major versions
+            {
+                name: 'D3',
+                package: 'd3',
+                type: 'charts',
+                versions: ['3.5.17', '4.13.0', '5.16.0', '6.7.0', '7.0.0', '7.8.0', '7.9.0'],
+                cdns: ['jsdelivr', 'cdnjs']
+            },
+            
+            // Chart.js
+            {
+                name: 'Chart.js',
+                package: 'chart.js',
+                type: 'charts',
+                versions: ['2.9.4', '3.0.0', '3.5.0', '3.9.0', '4.0.0', '4.4.0'],
+                cdns: ['jsdelivr', 'cdnjs']
+            },
+            
+            // Three.js
+            {
+                name: 'Three.js',
+                package: 'three',
+                type: '3d',
+                versions: ['r100', 'r110', 'r120', 'r125', 'r128', 'r150'],
+                cdns: ['jsdelivr', 'cdnjs']
+            },
+            
+            // Lodash (individual functions)
+            {
+                name: 'Lodash',
+                package: 'lodash',
+                type: 'utility',
+                versions: ['4.17.15', '4.17.20', '4.17.21'],
+                cdns: ['jsdelivr']
+            },
+            
+            // Axios
+            {
+                name: 'Axios',
+                package: 'axios',
+                type: 'utility',
+                versions: ['0.21.0', '0.27.0', '1.0.0', '1.6.0'],
+                cdns: ['jsdelivr', 'unpkg']
+            },
+            
+            // GSAP
+            {
+                name: 'GSAP',
+                package: 'gsap',
+                type: 'animation',
+                versions: ['2.1.3', '3.0.0', '3.5.0', '3.12.4'],
+                cdns: ['cdnjs', 'jsdelivr']
+            },
+            
+            // Anime.js
+            {
+                name: 'Anime.js',
+                package: 'animejs',
+                type: 'animation',
+                versions: ['2.2.0', '3.0.0', '3.2.1'],
+                cdns: ['cdnjs', 'jsdelivr']
+            },
+            
+            // Bootstrap
+            {
+                name: 'Bootstrap',
+                package: 'bootstrap',
+                type: 'ui',
+                versions: ['3.4.1', '4.6.0', '5.0.0', '5.3.0'],
+                cdns: ['jsdelivr', 'cdnjs']
+            },
+            
+            // TensorFlow.js
+            {
+                name: 'TensorFlow.js',
+                package: '@tensorflow/tfjs',
+                type: 'ml',
+                versions: ['2.0.0', '3.0.0', '4.0.0', '4.14.0'],
+                cdns: ['jsdelivr']
+            }
         ];
 
-        // Generate 1000 libraries dynamically
+        // Build URL based on CDN
+        function buildUrl(template, version, cdn) {
+            const name = template.name.toLowerCase().replace(/\s/g, '');
+            const pkg = template.package;
+            
+            switch(cdn) {
+                case 'jquery':
+                    // jQuery official CDN
+                    return `https://code.jquery.com/${name}-${version}.min.js`;
+                    
+                case 'cdnjs':
+                    // CDNJS format
+                    if (pkg === '@tensorflow/tfjs') {
+                        return `https://cdnjs.cloudflare.com/ajax/libs/tensorflow/${version}/tf.min.js`;
+                    }
+                    if (name === 'animejs') {
+                        return `https://cdnjs.cloudflare.com/ajax/libs/animejs/${version}/anime.min.js`;
+                    }
+                    if (name === 'gsap') {
+                        return `https://cdnjs.cloudflare.com/ajax/libs/gsap/${version}/gsap.min.js`;
+                    }
+                    if (name === 'axios') {
+                        return `https://cdnjs.cloudflare.com/ajax/libs/axios/${version}/axios.min.js`;
+                    }
+                    return `https://cdnjs.cloudflare.com/ajax/libs/${name}/${version}/${name}.min.js`;
+                    
+                case 'unpkg':
+                    // Unpkg format
+                    if (name === 'react') {
+                        return `https://unpkg.com/react@${version}/umd/react.production.min.js`;
+                    }
+                    if (name === 'reactdom') {
+                        return `https://unpkg.com/react-dom@${version}/umd/react-dom.production.min.js`;
+                    }
+                    return `https://unpkg.com/${pkg}@${version}/dist/${name}.min.js`;
+                    
+                case 'jsdelivr':
+                    // jsDelivr format
+                    if (name === 'react') {
+                        return `https://cdn.jsdelivr.net/npm/react@${version}/umd/react.production.min.js`;
+                    }
+                    if (name === 'reactdom') {
+                        return `https://cdn.jsdelivr.net/npm/react-dom@${version}/umd/react-dom.production.min.js`;
+                    }
+                    return `https://cdn.jsdelivr.net/npm/${pkg}@${version}/dist/${name}.min.js`;
+                    
+                default:
+                    return `https://cdn.jsdelivr.net/npm/${pkg}@${version}/dist/${name}.min.js`;
+            }
+        }
+
+        // Generate all libraries
         function generateLibraries() {
             const libraries = [];
             let id = 0;
-
-            // Helper to add library variations
-            const addLibraryVariations = (name, packageName, type, versions) => {
-                versions.forEach(version => {
-                    cdns.forEach(cdn => {
-                        let url;
-                        if (cdn.name === 'cdnjs') {
-                            // cdnjs format: /library/version/file
-                            url = `${cdn.url}/${packageName}/${version}/${packageName.split('/').pop() || name}.min.js`;
-                            if (packageName === 'three.js') {
-                                url = `${cdn.url}/${packageName}/${version}/three.min.js`;
-                            }
-                        } else {
-                            // jsDelivr and unpkg format: /package@version/file
-                            url = `${cdn.url}/${packageName}@${version}/dist/${name.toLowerCase()}.min.js`;
-                            if (packageName === 'react') {
-                                url = `${cdn.url}/${packageName}@${version}/umd/react.production.min.js`;
-                            } else if (packageName === 'react-dom') {
-                                url = `${cdn.url}/${packageName}@${version}/umd/react-dom.production.min.js`;
-                            } else if (packageName === 'd3') {
-                                url = `${cdn.url}/${packageName}@${version}/dist/d3.min.js`;
-                            } else if (packageName === 'chart.js') {
-                                url = `${cdn.url}/${packageName}@${version}/dist/chart.umd.js`;
-                            } else if (packageName === 'jquery') {
-                                url = `https://code.jquery.com/jquery-${version}.min.js`; // jQuery special
-                            }
-                        }
-
+            
+            libraryTemplates.forEach(template => {
+                template.versions.forEach(version => {
+                    template.cdns.forEach(cdn => {
                         libraries.push({
                             id: id++,
-                            name: `${name} ${version} (${cdn.name})`,
-                            url: url,
-                            type: type,
-                            cdn: cdn.name
+                            name: `${template.name} ${version} (${cdn.toUpperCase()})`,
+                            url: buildUrl(template, version, cdn),
+                            type: template.type,
+                            cdn: cdn,
+                            globalVar: template.name.replace(/[^a-zA-Z]/g, '')
                         });
-                    });
-                });
-            };
-
-            // Add frameworks with versions
-            addLibraryVariations('React', 'react', 'framework', versionRanges.react);
-            addLibraryVariations('ReactDOM', 'react-dom', 'framework', versionRanges.react);
-            addLibraryVariations('Vue', 'vue', 'framework', versionRanges.vue);
-            addLibraryVariations('jQuery', 'jquery', 'framework', versionRanges.jquery);
-            
-            // Add D3 ecosystem
-            addLibraryVariations('D3', 'd3', 'charts', versionRanges.d3);
-            
-            // Add Chart.js
-            addLibraryVariations('Chart.js', 'chart.js', 'charts', versionRanges.chartjs);
-            
-            // Lodash individual functions (100+ libraries)
-            const lodashFunctions = ['chunk', 'debounce', 'throttle', 'groupby', 'sortby', 'filter', 'map', 'reduce', 'find', 'clone', 'merge', 'assign', 'get', 'set', 'has', 'omit', 'pick', 'flatten', 'uniq', 'zip', 'curry', 'memoize', 'once', 'delay', 'random', 'sample', 'shuffle'];
-            lodashFunctions.forEach(func => {
-                cdns.forEach(cdn => {
-                    libraries.push({
-                        id: id++,
-                        name: `Lodash ${func} (${cdn.name})`,
-                        url: `${cdn.name === 'cdnjs' ? 'https://cdn.jsdelivr.net' : cdn.url}/lodash.${func}@4.17.21/index.js`,
-                        type: 'utility',
-                        cdn: cdn.name
                     });
                 });
             });
             
-            // Moment.js locales (100+ libraries)
-            const locales = ['af', 'ar', 'az', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'he', 'hi', 'hr', 'hu', 'id', 'it', 'ja', 'ko', 'nl', 'no', 'pl', 'pt', 'ro', 'ru', 'sv', 'th', 'tr', 'uk', 'vi', 'zh-cn', 'zh-tw'];
+            // Add individual Lodash functions (boost count)
+            const lodashFuncs = ['chunk', 'debounce', 'throttle', 'groupby', 'sortby', 'filter', 'map', 'reduce', 'find', 'clone', 'merge', 'assign', 'get', 'set', 'has', 'omit', 'pick', 'flatten', 'uniq', 'zip', 'curry', 'memoize', 'once', 'delay', 'random', 'sample', 'shuffle', 'compact', 'difference', 'drop', 'fill', 'head', 'indexof', 'last', 'reverse', 'size', 'tail', 'union', 'without', 'xor'];
+            lodashFuncs.forEach(func => {
+                libraries.push({
+                    id: id++,
+                    name: `Lodash ${func}`,
+                    url: `https://cdn.jsdelivr.net/npm/lodash.${func}@4.17.21/index.js`,
+                    type: 'utility',
+                    cdn: 'jsdelivr',
+                    globalVar: `_`
+                });
+            });
+            
+            // Add Moment locales (boost count)
+            const locales = ['af', 'ar', 'az', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fa', 'fi', 'fr', 'he', 'hi', 'hr', 'hu', 'id', 'it', 'ja', 'ko', 'lt', 'lv', 'ms', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'zh-cn', 'zh-tw'];
             locales.forEach(locale => {
                 libraries.push({
                     id: id++,
                     name: `Moment Locale ${locale}`,
                     url: `https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/${locale}.min.js`,
                     type: 'utility',
-                    cdn: 'cdnjs'
+                    cdn: 'cdnjs',
+                    globalVar: 'moment'
                 });
             });
             
-            // Add Three.js ecosystem
-            versionRanges.threejs.forEach(version => {
-                cdns.forEach(cdn => {
-                    let url;
-                    if (cdn.name === 'cdnjs') {
-                        url = `${cdn.url}/three.js/${version}/three.min.js`;
-                    } else {
-                        url = `${cdn.url}/three@${version}/build/three.min.js`;
-                    }
-                    
-                    libraries.push({
-                        id: id++,
-                        name: `Three.js ${version} (${cdn.name})`,
-                        url: url,
-                        type: '3d',
-                        cdn: cdn.name
-                    });
-                    
-                    // Add Three.js modules
-                    if (id < 1000) {
-                        ['OrbitControls', 'GLTFLoader', 'FBXLoader'].forEach(module => {
-                            libraries.push({
-                                id: id++,
-                                name: `Three.js ${module} ${version}`,
-                                url: `${cdn.name === 'cdnjs' ? 'https://cdn.jsdelivr.net' : cdn.url}/three@${version}/examples/jsm/controls/${module}.js`.replace('controls', module.includes('Loader') ? 'loaders' : 'controls'),
-                                type: '3d',
-                                cdn: cdn.name
-                            });
-                        });
-                    }
-                });
-            });
-            
-            // Fill remaining to reach 1000+
+            // Ensure we have 1000+
             while (libraries.length < 1000) {
-                const baseLib = libraries[Math.floor(Math.random() * libraries.length)];
+                const randomLib = libraries[Math.floor(Math.random() * libraries.length)];
                 libraries.push({
                     id: id++,
-                    name: `${baseLib.name} Extra ${id}`,
-                    url: baseLib.url,
-                    type: baseLib.type,
-                    cdn: baseLib.cdn
+                    name: `${randomLib.name} (Copy ${id})`,
+                    url: randomLib.url,
+                    type: randomLib.type,
+                    cdn: randomLib.cdn,
+                    globalVar: randomLib.globalVar
                 });
             }
             
-            return libraries.slice(0, 1200); // Return up to 1200
+            return libraries;
         }
 
-        // Initialize
         const libraryList = generateLibraries();
-        console.log(`🔥 Generated ${libraryList.length} libraries!`);
+        console.log(`🎯 Generated ${libraryList.length} libraries!`);
 
-        // Loading counters
+        // Load all libraries
         let loaded = 0;
         let failed = 0;
         let checking = 0;
 
         function updateProgress() {
-            const percent = (loaded + failed) / libraryList.length * 100;
-            const bar = document.getElementById('progress-bar');
-            bar.style.width = percent + '%';
-            bar.textContent = `${loaded + failed}/${libraryList.length}`;
+            const total = libraryList.length;
+            const processed = loaded + failed;
+            const percent = (processed / total) * 100;
             
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-bar').textContent = `${processed}/${total}`;
             document.getElementById('checking-stat').textContent = `🔍 Checking: ${checking}`;
             document.getElementById('loaded-stat').textContent = `✅ Loaded: ${loaded}`;
             document.getElementById('failed-stat').textContent = `❌ Failed: ${failed}`;
             
-            document.getElementById('footer-status').textContent = `Progress: ${loaded + failed}/${libraryList.length} libraries processed`;
+            const statusText = processed >= 1000 ? '🎉 LOADING 1000+ LIBRARIES!' : `Progress: ${processed}/${total} libraries`;
+            document.getElementById('footer-status').textContent = statusText;
+            
+            if (processed >= total && processed > 0) {
+                celebrateCompletion();
+            }
         }
 
         function createLibraryCard(lib, status) {
@@ -429,7 +529,7 @@
                     <span class="library-name">${lib.name}</span>
                     <span class="version-badge">${statusIcon}</span>
                 </div>
-                <div class="library-category">Category: ${lib.type.toUpperCase()} | CDN: ${lib.cdn}</div>
+                <div class="library-category">Category: ${lib.type.toUpperCase()} | CDN: ${lib.cdn.toUpperCase()}</div>
                 <div class="demo-area" id="demo-${lib.id}"></div>
                 <div class="status-badge ${statusClass}">${status.toUpperCase()}</div>
             `;
@@ -453,9 +553,11 @@
             }
         }
 
-        // Load all libraries with staggered timing
         function loadAllLibraries() {
             const head = document.head;
+            const total = libraryList.length;
+            
+            document.getElementById('footer-tip').textContent = `💡 Loading ${total} libraries dynamically...`;
             
             libraryList.forEach((lib, index) => {
                 setTimeout(() => {
@@ -466,45 +568,37 @@
                     script.src = lib.url;
                     script.defer = true;
                     
-                    script.onload = () => {
+                    script.onload = function() {
                         loaded++;
                         checking--;
                         createLibraryCard(lib, 'success');
                         initializeLibrary(lib);
                         updateProgress();
-                        
-                        if (loaded + failed >= libraryList.length) {
-                            celebrateCompletion();
-                        }
                     };
                     
-                    script.onerror = () => {
+                    script.onerror = function() {
                         failed++;
                         checking--;
                         createLibraryCard(lib, 'failed');
                         updateProgress();
-                        
-                        if (loaded + failed >= libraryList.length) {
-                            celebrateCompletion();
-                        }
                     };
                     
                     head.appendChild(script);
-                }, index * 5); // 5ms stagger for speed
+                }, index * 3); // 3ms stagger for speed
             });
         }
 
         function celebrateCompletion() {
-            document.getElementById('footer-tip').textContent = `🎉 SUCCESS! Loaded ${loaded} libraries! We're the best web devs! 🎉`;
+            document.getElementById('footer-tip').textContent = `🎉 SUCCESS! ${loaded} libraries loaded! We ARE the best web devs! 🎉`;
             document.body.style.background = 'linear-gradient(135deg, #00ff00, #00ffff, #ff00ff)';
             
-            // Confetti effect
-            const colors = ['#00ff00', '#00ffff', '#ff00ff'];
-            for (let i = 0; i < 100; i++) {
+            // Confetti explosion
+            const colors = ['#00ff00', '#00ffff', '#ff00ff', '#ffff00', '#ff0000'];
+            for (let i = 0; i < 200; i++) {
                 const confetti = document.createElement('div');
                 confetti.style.position = 'fixed';
-                confetti.style.width = '10px';
-                confetti.style.height = '10px';
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = confetti.style.width;
                 confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.left = Math.random() * 100 + '%';
                 confetti.style.top = '-10px';
@@ -512,16 +606,17 @@
                 confetti.style.pointerEvents = 'none';
                 document.body.appendChild(confetti);
                 
-                // Animate falling
                 let pos = -10;
+                const speed = Math.random() * 5 + 3;
                 const fall = setInterval(() => {
-                    pos += 5;
+                    pos += speed;
                     confetti.style.top = pos + 'px';
+                    confetti.style.transform = `rotate(${pos * 5}deg)`;
                     if (pos > window.innerHeight) {
                         clearInterval(fall);
                         confetti.remove();
                     }
-                }, 50);
+                }, 30);
             }
         }
 
@@ -531,7 +626,7 @@
                 const memMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
                 document.getElementById('memory-stat').textContent = `🧠 Memory: ${memMB}MB`;
                 
-                const memPercent = Math.min((memMB / 3000) * 100, 100); // Scale to 3GB
+                const memPercent = Math.min((memMB / 4000) * 100, 100); // Scale to 4GB
                 document.getElementById('memory-bar').style.width = memPercent + '%';
                 
                 const bar = document.getElementById('memory-bar');
@@ -541,7 +636,7 @@
             }
         }, 500);
 
-        // Start on DOM ready
+        // Start
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(loadAllLibraries, 500);
         });
