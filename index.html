@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHAOS ENGINE v2.0 - 100 Libraries</title>
+    <title>FIREFOX-SAFE CHAOS ENGINE v3.0</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -21,7 +21,7 @@
         }
         .status-grid { 
             display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
-            gap: 5px; margin-top: 10px;
+            gap: 5px; margin-top: 10px; max-height: 150px; overflow-y: auto;
         }
         .status-item { 
             padding: 5px; background: rgba(255,0,255,0.1); 
@@ -81,8 +81,8 @@
 <body>
     <!-- CHAOS HEADER -->
     <div class="chaos-header">
-        <h1 class="glitch">🚨 CHAOS ENGINE v2.0 - 100 LIBRARIES 🚨</h1>
-        <div>Loaded: <span id="loaded-count">0</span>/100 | Failed: <span id="failed-count">0</span> | Memory: <span id="memory-mb">0</span>MB</div>
+        <h1 class="glitch">🚨 FIREFOX-SAFE CHAOS ENGINE v3.0 🚨</h1>
+        <div>Checking: <span id="checking-status">0</span>/100 | Loaded: <span id="loaded-count">0</span> | Failed: <span id="failed-count">0</span> | Memory: <span id="memory-mb">0</span>MB</div>
         <div class="status-grid" id="status-grid"></div>
     </div>
 
@@ -92,227 +92,355 @@
     <!-- CHAOS GRID -->
     <div class="chaos-grid" id="chaos-grid"></div>
 
-    <!-- ==================== 100 CDN LIBRARIES ==================== -->
+    <!-- ==================== 100 CDN LIBRARIES (ALL WITH DEFER) ==================== -->
+    <!-- NO onload/onerror handlers - Firefox hates them -->
     
-    <!-- PHASE 1: CORE FRAMEWORKS (15) -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" onload="libLoaded('React')" onerror="libFailed('React')"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" onload="libLoaded('ReactDOM')" onerror="libFailed('ReactDOM')"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js" onload="libLoaded('Vue')" onerror="libFailed('Vue')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" onload="libLoaded('Angular')" onerror="libFailed('Angular')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ember.js/4.12.0/ember.min.js" onload="libLoaded('Ember')" onerror="libFailed('Ember')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.1/backbone-min.js" onload="libLoaded('Backbone')" onerror="libFailed('Backbone')"></script>
-    <script src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js" defer onload="libLoaded('Alpine')" onerror="libFailed('Alpine')"></script>
-    <script src="https://unpkg.com/preact@10.19.3/dist/preact.min.js" onload="libLoaded('Preact')" onerror="libFailed('Preact')"></script>
-    <script src="https://unpkg.com/inferno@8.2.3/dist/inferno.min.js" onload="libLoaded('Inferno')" onerror="libFailed('Inferno')"></script>
-    <script src="https://unpkg.com/mithril@2.2.2/mithril.min.js" onload="libLoaded('Mithril')" onerror="libFailed('Mithril')"></script>
-    <script src="https://unpkg.com/riot@7.1.0/riot.min.js" onload="libLoaded('Riot')" onerror="libFailed('Riot')"></script>
-    <script src="https://unpkg.com/hyperapp@2.0.22/index.js" onload="libLoaded('Hyperapp')" onerror="libFailed('Hyperapp')"></script>
-    <script src="https://unpkg.com/surplus@0.5.5/compiler/index.js" onload="libLoaded('Surplus')" onerror="libFailed('Surplus')"></script>
-    <script src="https://unpkg.com/maquette@4.0.3/dist/maquette.min.js" onload="libLoaded('Maquette')" onerror="libFailed('Maquette')"></script>
-    <script src="https://unpkg.com/crank@0.5.1/crank.js" onload="libLoaded('Crank')" onerror="libFailed('Crank')"></script>
+    <!-- CORE FRAMEWORKS -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" defer></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" defer></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ember.js/4.12.0/ember.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.1/backbone-min.js" defer></script>
+    <script src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/preact@10.19.3/dist/preact.min.js" defer></script>
+    <script src="https://unpkg.com/inferno@8.2.3/dist/inferno.min.js" defer></script>
+    <script src="https://unpkg.com/mithril@2.2.2/mithril.min.js" defer></script>
+    <script src="https://unpkg.com/riot@7.1.0/riot.min.js" defer></script>
+    <script src="https://unpkg.com/hyperapp@2.0.22/index.js" defer></script>
+    <script src="https://unpkg.com/surplus@0.5.5/compiler/index.js" defer></script>
+    <script src="https://unpkg.com/maquette@4.0.3/dist/maquette.min.js" defer></script>
+    <script src="https://unpkg.com/crank@0.5.1/crank.js" defer></script>
 
-    <!-- PHASE 2: GRAPHICS & 3D (20) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onload="libLoaded('Three.js')" onerror="libFailed('Three.js')"></script>
-    <script src="https://cdn.babylonjs.com/babylon.js" onload="libLoaded('Babylon.js')" onerror="libFailed('Babylon.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js" onload="libLoaded('Phaser')" onerror="libFailed('Phaser')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js" onload="libLoaded('PixiJS')" onerror="libFailed('PixiJS')"></script>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js" onload="libLoaded('A-Frame')" onerror="libFailed('A-Frame')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/two.js@0.8.13/build/two.min.js" onload="libLoaded('Two.js')" onerror="libFailed('Two.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.17/paper-full.min.js" onload="libLoaded('Paper.js')" onerror="libFailed('Paper.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/easeljs/1.0.2/easeljs.min.js" onload="libLoaded('EaselJS')" onerror="libFailed('EaselJS')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/konva@9.2.3/konva.min.js" onload="libLoaded('Konva')" onerror="libFailed('Konva')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" onload="libLoaded('Fabric.js')" onerror="libFailed('Fabric.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/zdog@1.1.3/dist/zdog.dist.min.js" onload="libLoaded('Zdog')" onerror="libFailed('Zdog')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.min.js" onload="libLoaded('p5.js')" onerror="libFailed('p5.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.min.js" onload="libLoaded('p5.sound')" onerror="libFailed('p5.sound')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" onload="libLoaded('Matter.js')" onerror="libFailed('Matter.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p2.js/0.7.1/p2.min.js" onload="libLoaded('p2.js')" onerror="libFailed('p2.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/planck-js/0.3.31/planck-with-testbed.min.js" onload="libLoaded('Planck.js')" onerror="libFailed('Planck.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js" onload="libLoaded('Cannon.js')" onerror="libFailed('Cannon.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/polydecomp.js/0.1.1/polydecomp.min.js" onload="libLoaded('PolyDecomp')" onerror="libFailed('PolyDecomp')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crafty/0.9.0/crafty.min.js" onload="libLoaded('Crafty')" onerror="libFailed('Crafty')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/melonjs/13.1.0/melonjs.min.js" onload="libLoaded('MelonJS')" onerror="libFailed('MelonJS')"></script>
+    <!-- GRAPHICS & 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js" defer></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/two.js@0.8.13/build/two.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.17/paper-full.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/easeljs/1.0.2/easeljs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/konva@9.2.3/konva.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/zdog@1.1.3/dist/zdog.dist.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p2.js/0.7.1/p2.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/planck-js/0.3.31/planck-with-testbed.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/polydecomp.js/0.1.1/polydecomp.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crafty/0.9.0/crafty.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/melonjs/13.1.0/melonjs.min.js" defer></script>
 
-    <!-- PHASE 3: ANIMATION (15) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" onload="libLoaded('GSAP')" onerror="libFailed('GSAP')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js" onload="libLoaded('GSAP ScrollTrigger')" onerror="libFailed('GSAP ScrollTrigger')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" onload="libLoaded('Anime.js')" onerror="libFailed('Anime.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js" onload="libLoaded('Velocity.js')" onerror="libFailed('Velocity.js')"></script>
-    <script src="https://unpkg.com/popmotion@11.0.5/dist/popmotion.js" onload="libLoaded('Popmotion')" onerror="libFailed('Popmotion')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mo-js/0.288.2/mo.min.js" onload="libLoaded('Mo.js')" onerror="libFailed('Mo.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" onload="libLoaded('Lottie')" onerror="libFailed('Lottie')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.6/vivus.min.js" onload="libLoaded('Vivus')" onerror="libFailed('Vivus')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js" onload="libLoaded('Typed.js')" onerror="libFailed('Typed.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js" onload="libLoaded('Waypoints')" onerror="libFailed('Waypoints')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js" onload="libLoaded('Tilt.js')" onerror="libFailed('Tilt.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" onload="libLoaded('Splide')" onerror="libFailed('Splide')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11.0.5/swiper-bundle.min.js" onload="libLoaded('Swiper')" onerror="libFailed('Swiper')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flip/1.1.1/flip.min.js" onload="libLoaded('Flip')" onerror="libFailed('Flip')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollreveal/4.0.9/scrollreveal.min.js" onload="libLoaded('ScrollReveal')" onerror="libFailed('ScrollReveal')"></script>
+    <!-- ANIMATION -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js" defer></script>
+    <script src="https://unpkg.com/popmotion@11.0.5/dist/popmotion.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mo-js/0.288.2/mo.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.6/vivus.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11.0.5/swiper-bundle.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flip/1.1.1/flip.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollreveal/4.0.9/scrollreveal.min.js" defer></script>
 
-    <!-- PHASE 4: DATA VISUALIZATION (15) -->
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js" onload="libLoaded('D3.js')" onerror="libFailed('D3.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js" onload="libLoaded('ECharts')" onerror="libFailed('ECharts')"></script>
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" onload="libLoaded('Plotly')" onerror="libFailed('Plotly')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" onload="libLoaded('Chart.js')" onerror="libFailed('Chart.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js" onload="libLoaded('ApexCharts')" onerror="libFailed('ApexCharts')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js" onload="libLoaded('C3.js')" onerror="libFailed('C3.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js" onload="libLoaded('Sigma.js')" onerror="libFailed('Sigma.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/highcharts@11.3.0/highcharts.js" onload="libLoaded('Highcharts')" onerror="libFailed('Highcharts')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js" onload="libLoaded('Frappe Charts')" onerror="libFailed('Frappe Charts')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartist@1.3.0/dist/chartist.min.js" onload="libLoaded('Chartist')" onerror="libFailed('Chartist')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@nivo/core@0.84.0/umd/nivo-core.min.js" onload="libLoaded('Nivo Core')" onerror="libFailed('Nivo Core')"></script>
-    <script src="https://unpkg.com/react-charts@3.0.0-beta.38/dist/index.umd.js" onload="libLoaded('React Charts')" onerror="libFailed('React Charts')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/billboard.js@3.10.2/dist/billboard.min.js" onload="libLoaded('Billboard.js')" onerror="libFailed('Billboard.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js" onload="libLoaded('Vis Network')" onerror="libFailed('Vis Network')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cal-heatmap@4.0.4/dist/cal-heatmap.min.js" onload="libLoaded('Cal-Heatmap')" onerror="libFailed('Cal-Heatmap')"></script>
+    <!-- DATA VISUALIZATION -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js" defer></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/highcharts@11.3.0/highcharts.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartist@1.3.0/dist/chartist.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@nivo/core@0.84.0/umd/nivo-core.min.js" defer></script>
+    <script src="https://unpkg.com/react-charts@3.0.0-beta.38/dist/index.umd.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/billboard.js@3.10.2/dist/billboard.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/cal-heatmap@4.0.4/dist/cal-heatmap.min.js" defer></script>
 
-    <!-- PHASE 5: MAPS & GEO (10) -->
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" onload="libLoaded('Leaflet')" onerror="libFailed('Leaflet')"></script>
+    <!-- MAPS -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js" onload="libLoaded('Mapbox GL')" onerror="libFailed('Mapbox GL')"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js" defer></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js" onload="libLoaded('Cesium')" onerror="libFailed('Cesium')"></script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js" defer></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-    <script src="https://unpkg.com/ol@8.2.0/dist/ol.js" onload="libLoaded('OpenLayers')" onerror="libFailed('OpenLayers')"></script>
+    <script src="https://unpkg.com/ol@8.2.0/dist/ol.js" defer></script>
     <link rel="stylesheet" href="https://unpkg.com/ol@8.2.0/ol.css">
-    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js" onload="libLoaded('Turf.js')" onerror="libFailed('Turf.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js" onload="libLoaded('TopoJSON')" onerror="libFailed('TopoJSON')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-geo@3.1.0/dist/d3-geo.min.js" onload="libLoaded('D3 Geo')" onerror="libFailed('D3 Geo')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/geolib@3.3.4/lib/geolib.min.js" onload="libLoaded('GeoLib')" onerror="libFailed('GeoLib')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/proj4@2.9.2/dist/proj4.js" onload="libLoaded('Proj4')" onerror="libFailed('Proj4')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" onload="libLoaded('Leaflet MarkerCluster')" onerror="libFailed('Leaflet MarkerCluster')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-geo@3.1.0/dist/d3-geo.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/geolib@3.3.4/lib/geolib.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/proj4@2.9.2/dist/proj4.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" defer></script>
 
-    <!-- PHASE 6: AUDIO & MEDIA (10) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" onload="libLoaded('Tone.js')" onerror="libFailed('Tone.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" onload="libLoaded('Howler.js')" onload="libLoaded('Howler.js')" onerror="libFailed('Howler.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/addons/p5.sound.min.js" onload="libLoaded('p5.sound')" onerror="libFailed('p5.sound')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.7.3/wavesurfer.min.js" onload="libLoaded('WaveSurfer')" onerror="libFailed('WaveSurfer')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vudio@2.0.1/dist/vudio.min.js" onload="libLoaded('Vudio')" onerror="libFailed('Vudio')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pizzicato@0.6.4/distr/Pizzicato.min.js" onload="libLoaded('Pizzicato')" onerror="libFailed('Pizzicato')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/webpd@2.1.1/dist/webpd.min.js" onload="libLoaded('WebPd')" onerror="libFailed('WebPd')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/crunker@1.0.0/dist/crunker.min.js" onload="libLoaded('Crunker')" onerror="libFailed('Crunker')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dancer@0.3.3/dancer.min.js" onload="libLoaded('Dancer')" onerror="libFailed('Dancer')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/wad@0.1.0/build/wad.min.js" onload="libLoaded('Wad')" onerror="libFailed('Wad')"></script>
+    <!-- AUDIO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.7.3/wavesurfer.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vudio@2.0.1/dist/vudio.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/pizzicato@0.6.4/distr/Pizzicato.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/webpd@2.1.1/dist/webpd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/crunker@1.0.0/dist/crunker.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dancer@0.3.3/dancer.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/wad@0.1.0/build/wad.min.js" defer></script>
 
-    <!-- PHASE 7: UI KITS & STYLES (15) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" onload="libLoaded('Bootstrap')" onerror="libFailed('Bootstrap')"></script>
+    <!-- UI KITS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js" onload="libLoaded('Ant Design')" onerror="libFailed('Ant Design')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css">
-    <script src="https://unpkg.com/emotion@11.11.0/dist/emotion.umd.min.js" onload="libLoaded('Emotion')" onerror="libFailed('Emotion')"></script>
-    <script src="https://unpkg.com/styled-components@6.1.1/dist/styled-components.min.js" onload="libLoaded('Styled Components')" onerror="libFailed('Styled Components')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.4/umd/material-ui.production.min.js" onload="libLoaded('Material-UI')" onerror="libFailed('Material-UI')"></script>
-    <script src="https://unpkg.com/chakra-ui@0.8.0/dist/umd/chakra-ui.js" onload="libLoaded('Chakra UI')" onerror="libFailed('Chakra UI')"></script>
-    <script src="https://unpkg.com/primevue@3.40.1/primevue.all.min.js" onload="libLoaded('PrimeVue')" onerror="libFailed('PrimeVue')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js" onload="libLoaded('Semantic UI')" onerror="libFailed('Semantic UI')"></script>
+    <script src="https://unpkg.com/emotion@11.11.0/dist/emotion.umd.min.js" defer></script>
+    <script src="https://unpkg.com/styled-components@6.1.1/dist/styled-components.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.4/umd/material-ui.production.min.js" defer></script>
+    <script src="https://unpkg.com/chakra-ui@0.8.0/dist/umd/chakra-ui.js" defer></script>
+    <script src="https://unpkg.com/primevue@3.40.1/primevue.all.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" onload="libLoaded('Bulma CSS')" onerror="libFailed('Bulma CSS')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" onload="libLoaded('Tailwind CSS')" onerror="libFailed('Tailwind CSS')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.6/dist/vuetify.min.js" onload="libLoaded('Vuetify')" onerror="libFailed('Vuetify')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.6/dist/vuetify.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.4.6/dist/vuetify.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/index.js" onload="libLoaded('Element UI')" onerror="libFailed('Element UI')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/index.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css">
-    <script src="https://cdn.jsdelivr.net/npm/@blueprintjs/core@5.6.0/lib/cjs/blueprint.js" onload="libLoaded('Blueprint.js')" onerror="libFailed('Blueprint.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@blueprintjs/core@5.6.0/lib/cjs/blueprint.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@blueprintjs/core@5.6.0/lib/css/blueprint.css">
 
-    <!-- PHASE 8: MACHINE LEARNING (10) -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js" onload="libLoaded('TensorFlow.js')" onerror="libFailed('TensorFlow.js')"></script>
-    <script src="https://unpkg.com/ml5@1/dist/ml5.min.js" onload="libLoaded('ml5.js')" onerror="libFailed('ml5.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js" onload="libLoaded('TensorFlow Vis')" onerror="libFailed('TensorFlow Vis')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js" onload="libLoaded('MobileNet')" onerror="libFailed('MobileNet')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js" onload="libLoaded('Coco SSD')" onerror="libFailed('Coco SSD')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2/dist/posenet.min.js" onload="libLoaded('PoseNet')" onerror="libFailed('PoseNet')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose@0.0.7/dist/handpose.min.js" onload="libLoaded('HandPose')" onerror="libFailed('HandPose')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh@0.0.5/dist/facemesh.min.js" onload="libLoaded('FaceMesh')" onerror="libFailed('FaceMesh')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@1.3.3/dist/universal-sentence-encoder.min.js" onload="libLoaded('USE')" onerror="libFailed('USE')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-automl@1.3.0/dist/tf-automl.min.js" onload="libLoaded('TF AutoML')" onerror="libFailed('TF AutoML')"></script>
+    <!-- MACHINE LEARNING -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js" defer></script>
+    <script src="https://unpkg.com/ml5@1/dist/ml5.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2/dist/posenet.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose@0.0.7/dist/handpose.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh@0.0.5/dist/facemesh.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@1.3.3/dist/universal-sentence-encoder.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-automl@1.3.0/dist/tf-automl.min.js" defer></script>
 
-    <!-- PHASE 9: UTILITY & TOOLS (15) -->
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" onload="libLoaded('Lodash')" onerror="libFailed('Lodash')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ramda@0.29.0/dist/ramda.min.js" onload="libLoaded('Ramda')" onerror="libFailed('Ramda')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/immutable@4.3.4/dist/immutable.min.js" onload="libLoaded('Immutable.js')" onerror="libFailed('Immutable.js')"></script>
-    <script src="https://unpkg.com/axios@1.6.5/dist/axios.min.js" onload="libLoaded('Axios')" onerror="libFailed('Axios')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js" onload="libLoaded('Day.js')" onerror="libFailed('Day.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js" onload="libLoaded('Luxon')" onerror="libFailed('Luxon')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@3.0.6/index.min.js" onload="libLoaded('date-fns')" onerror="libFailed('date-fns')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" onload="libLoaded('Moment.js')" onerror="libFailed('Moment.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js" onload="libLoaded('Validate.js')" onerror="libFailed('Validate.js')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ajv@8.12.0/dist/ajv.min.js" onload="libLoaded('Ajv')" onerror="libFailed('Ajv')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/parsimmon@1.18.1/build/parsimmon.browser.min.js" onload="libLoaded('Parsimmon')" onerror="libFailed('Parsimmon')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/comlink@4.4.1/dist/umd/comlink.min.js" onload="libLoaded('Comlink')" onerror="libFailed('Comlink')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/ffmpeg.min.js" onload="libLoaded('FFmpeg')" onerror="libFailed('FFmpeg')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/wasm-feature-detect@1.6.1/dist/umd/index.min.js" onload="libLoaded('WASM Feature Detect')" onerror="libFailed('WASM Feature Detect')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" onload="libLoaded('QRCode')" onerror="libFailed('QRCode')"></script>
+    <!-- UTILITY -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ramda@0.29.0/dist/ramda.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/immutable@4.3.4/dist/immutable.min.js" defer></script>
+    <script src="https://unpkg.com/axios@1.6.5/dist/axios.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@3.0.6/index.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ajv@8.12.0/dist/ajv.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/parsimmon@1.18.1/build/parsimmon.browser.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/comlink@4.4.1/dist/umd/comlink.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/ffmpeg.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/wasm-feature-detect@1.6.1/dist/umd/index.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" defer></script>
 
-    <!-- PHASE 10: REAL-TIME & WEBSOCKETS (5) -->
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" onload="libLoaded('Socket.IO')" onerror="libFailed('Socket.IO')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.4/dist/browser/signalr.min.js" onload="libLoaded('SignalR')" onerror="libFailed('SignalR')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reconnecting-websocket@4.4.0/dist/reconnecting-websocket-mjs.js" onload="libLoaded('Reconnecting WebSocket')" onerror="libFailed('Reconnecting WebSocket')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js" onload="libLoaded('PeerJS')" onerror="libFailed('PeerJS')"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js" onload="libLoaded('Simple Peer')" onerror="libFailed('Simple Peer')"></script>
+    <!-- REAL-TIME -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.4/dist/browser/signalr.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/reconnecting-websocket@4.4.0/dist/reconnecting-websocket-mjs.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js" defer></script>
 
-    <!-- ==================== CORE CHAOS ENGINE ==================== -->
+    <!-- ==================== MASTER INITIALIZATION (FIREFOX-SAFE) ==================== -->
     <script>
-        // LIBRARY STATUS TRACKER
-        window.libraryStatus = {};
-        window.loadedLibs = 0;
-        window.failedLibs = 0;
-        window.totalLibs = 100;
+        // Wait for ALL scripts to parse (deferred ensures this)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Give extra time for network delays
+            setTimeout(checkAndInitializeLibraries, 4000);
+        });
 
-        function libLoaded(name) {
-            window.libraryStatus[name] = 'loaded';
-            window.loadedLibs++;
-            updateStatusDisplay();
-            initializeLibrary(name);
-        }
+        function checkAndInitializeLibraries() {
+            const libraries = [
+                // [GlobalVariableName, DisplayName, Category]
+                ['React', 'React 18', 'framework'],
+                ['ReactDOM', 'ReactDOM', 'framework'],
+                ['Vue', 'Vue 3', 'framework'],
+                ['angular', 'Angular 1.x', 'framework'],
+                ['Ember', 'Ember', 'framework'],
+                ['Backbone', 'Backbone', 'framework'],
+                ['Alpine', 'Alpine.js', 'framework'],
+                ['preact', 'Preact', 'framework'],
+                ['Inferno', 'Inferno', 'framework'],
+                ['m', 'Mithril', 'framework'],
+                ['riot', 'Riot.js', 'framework'],
+                ['hyperapp', 'Hyperapp', 'framework'],
+                ['surplus', 'Surplus', 'framework'],
+                ['maquette', 'Maquette', 'framework'],
+                ['Crank', 'Crank', 'framework'],
+                
+                ['THREE', 'Three.js', '3d'],
+                ['BABYLON', 'Babylon.js', '3d'],
+                ['Phaser', 'Phaser', '3d'],
+                ['PIXI', 'PixiJS', '3d'],
+                ['AFRAME', 'A-Frame', '3d'],
+                ['Two', 'Two.js', '3d'],
+                ['paper', 'Paper.js', '3d'],
+                ['createjs', 'EaselJS', '3d'],
+                ['Konva', 'Konva', '3d'],
+                ['fabric', 'Fabric.js', '3d'],
+                ['Zdog', 'Zdog', '3d'],
+                ['p5', 'p5.js', '3d'],
+                ['Matter', 'Matter.js', '3d'],
+                ['p2', 'p2.js', '3d'],
+                ['planck', 'Planck.js', '3d'],
+                ['CANNON', 'Cannon.js', '3d'],
+                ['decomp', 'PolyDecomp', '3d'],
+                ['Crafty', 'Crafty', '3d'],
+                ['me', 'MelonJS', '3d'],
+                
+                ['gsap', 'GSAP', 'animation'],
+                ['anime', 'Anime.js', 'animation'],
+                ['Velocity', 'Velocity.js', 'animation'],
+                ['popmotion', 'Popmotion', 'animation'],
+                ['mojs', 'Mo.js', 'animation'],
+                ['lottie', 'Lottie', 'animation'],
+                ['Vivus', 'Vivus', 'animation'],
+                ['Typed', 'Typed.js', 'animation'],
+                ['Waypoint', 'Waypoints', 'animation'],
+                ['tilt', 'Tilt.js', 'animation'],
+                ['Splide', 'Splide', 'animation'],
+                ['Swiper', 'Swiper', 'animation'],
+                ['Flip', 'Flip', 'animation'],
+                ['ScrollReveal', 'ScrollReveal', 'animation'],
+                
+                ['d3', 'D3.js', 'charts'],
+                ['echarts', 'ECharts', 'charts'],
+                ['Plotly', 'Plotly', 'charts'],
+                ['Chart', 'Chart.js', 'charts'],
+                ['ApexCharts', 'ApexCharts', 'charts'],
+                ['c3', 'C3.js', 'charts'],
+                ['sigma', 'Sigma.js', 'charts'],
+                ['Highcharts', 'Highcharts', 'charts'],
+                ['frappe', 'Frappe Charts', 'charts'],
+                ['Chartist', 'Chartist', 'charts'],
+                ['nivo', 'Nivo', 'charts'],
+                ['ReactCharts', 'React Charts', 'charts'],
+                ['bb', 'Billboard.js', 'charts'],
+                ['vis', 'Vis Network', 'charts'],
+                ['CalHeatmap', 'Cal-Heatmap', 'charts'],
+                
+                ['L', 'Leaflet', 'maps'],
+                ['mapboxgl', 'Mapbox GL', 'maps'],
+                ['Cesium', 'Cesium', 'maps'],
+                ['ol', 'OpenLayers', 'maps'],
+                ['turf', 'Turf.js', 'maps'],
+                ['topojson', 'TopoJSON', 'maps'],
+                ['d3Geo', 'D3 Geo', 'maps'],
+                ['geolib', 'GeoLib', 'maps'],
+                ['proj4', 'Proj4', 'maps'],
+                ['MarkerCluster', 'Leaflet MarkerCluster', 'maps'],
+                
+                ['Tone', 'Tone.js', 'audio'],
+                ['Howler', 'Howler.js', 'audio'],
+                ['WaveSurfer', 'WaveSurfer', 'audio'],
+                ['Vudio', 'Vudio', 'audio'],
+                ['Pizzicato', 'Pizzicato', 'audio'],
+                ['WebPd', 'WebPd', 'audio'],
+                ['Crunker', 'Crunker', 'audio'],
+                ['Dancer', 'Dancer', 'audio'],
+                ['Wad', 'Wad', 'audio'],
+                
+                ['bootstrap', 'Bootstrap', 'ui'],
+                ['antd', 'Ant Design', 'ui'],
+                ['emotion', 'Emotion', 'ui'],
+                ['styled', 'Styled Components', 'ui'],
+                ['MaterialUI', 'Material-UI', 'ui'],
+                ['chakra', 'Chakra UI', 'ui'],
+                ['PrimeVue', 'PrimeVue', 'ui'],
+                ['semantic', 'Semantic UI', 'ui'],
+                ['Vuetify', 'Vuetify', 'ui'],
+                ['ELEMENT', 'Element UI', 'ui'],
+                ['Blueprint', 'Blueprint.js', 'ui'],
+                
+                ['tf', 'TensorFlow.js', 'ml'],
+                ['ml5', 'ml5.js', 'ml'],
+                ['tfvis', 'TensorFlow Vis', 'ml'],
+                ['mobilenet', 'MobileNet', 'ml'],
+                ['cocoSsd', 'Coco SSD', 'ml'],
+                ['posenet', 'PoseNet', 'ml'],
+                ['handpose', 'HandPose', 'ml'],
+                ['facemesh', 'FaceMesh', 'ml'],
+                ['use', 'Universal Sentence Encoder', 'ml'],
+                ['tfautoml', 'TF AutoML', 'ml'],
+                
+                ['_', 'Lodash', 'utility'],
+                ['R', 'Ramda', 'utility'],
+                ['Immutable', 'Immutable.js', 'utility'],
+                ['axios', 'Axios', 'utility'],
+                ['dayjs', 'Day.js', 'utility'],
+                ['luxon', 'Luxon', 'utility'],
+                ['dateFns', 'date-fns', 'utility'],
+                ['validate', 'Validate.js', 'utility'],
+                ['Ajv', 'Ajv', 'utility'],
+                ['Parsimmon', 'Parsimmon', 'utility'],
+                ['Comlink', 'Comlink', 'utility'],
+                ['FFmpeg', 'FFmpeg', 'utility'],
+                ['wasmFeatureDetect', 'WASM Feature Detect', 'utility'],
+                ['QRCode', 'QRCode', 'utility'],
+                
+                ['io', 'Socket.IO', 'realtime'],
+                ['signalR', 'SignalR', 'realtime'],
+                ['ReconnectingWebSocket', 'Reconnecting WebSocket', 'realtime'],
+                ['Peer', 'PeerJS', 'realtime'],
+                ['SimplePeer', 'Simple Peer', 'realtime']
+            ];
 
-        function libFailed(name) {
-            window.libraryStatus[name] = 'failed';
-            window.failedLibs++;
-            updateStatusDisplay();
-            createFailedSlot(name);
-        }
+            let loadedCount = 0;
+            let failedCount = 0;
+            let checkingIndex = 0;
 
-        function updateStatusDisplay() {
-            document.getElementById('loaded-count').textContent = window.loadedLibs;
-            document.getElementById('failed-count').textContent = window.failedLibs;
-            
-            // Update memory usage
-            if (performance.memory) {
-                const memMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
-                document.getElementById('memory-mb').textContent = memMB;
-                const memPercent = Math.min((memMB / 1000) * 100, 100);
-                document.getElementById('memory-bar').style.width = memPercent + '%';
+            // Process libraries one by one with delay to avoid blocking
+            function processNextLibrary() {
+                if (checkingIndex >= libraries.length) {
+                    // All processed
+                    document.getElementById('checking-status').textContent = 'COMPLETE';
+                    startChaosEffects();
+                    return;
+                }
+
+                const [globalVar, displayName, category] = libraries[checkingIndex];
+                document.getElementById('checking-status').textContent = checkingIndex + 1;
+
+                setTimeout(() => {
+                    if (typeof window[globalVar] !== 'undefined') {
+                        // Library exists - initialize it
+                        loadedCount++;
+                        document.getElementById('loaded-count').textContent = loadedCount;
+                        updateStatusItem(displayName, 'loaded');
+                        initializeLibrary(displayName, globalVar, category);
+                    } else {
+                        // Library failed to load
+                        failedCount++;
+                        document.getElementById('failed-count').textContent = failedCount;
+                        updateStatusItem(displayName, 'failed');
+                        createFailedSlot(displayName);
+                    }
+                    checkingIndex++;
+                    processNextLibrary(); // Process next
+                }, 50); // Small delay between checks
             }
-            
-            // Update status grid
+
+            // Start processing
+            processNextLibrary();
+        }
+
+        function updateStatusItem(name, status) {
             const grid = document.getElementById('status-grid');
-            grid.innerHTML = '';
-            Object.entries(window.libraryStatus).forEach(([name, status]) => {
-                const item = document.createElement('div');
-                item.className = `status-item ${status}`;
-                item.textContent = `${status === 'loaded' ? '✅' : '❌'} ${name}`;
-                grid.appendChild(item);
-            });
+            const item = document.createElement('div');
+            item.className = `status-item ${status}`;
+            item.textContent = `${status === 'loaded' ? '✅' : '❌'} ${name}`;
+            grid.appendChild(item);
         }
 
-        function createFailedSlot(name) {
-            const grid = document.getElementById('chaos-grid');
-            const slot = document.createElement('div');
-            slot.className = 'library-slot';
-            slot.innerHTML = `
-                <div class="failure-badge">FAILED</div>
-                <div class="error-placeholder">
-                    <h3>${name}</h3>
-                    <p>Library failed to load or doesn't exist</p>
-                    <small>This is fine. Chaos continues.</small>
-                </div>
-            `;
-            grid.appendChild(slot);
-        }
-
-        function initializeLibrary(name) {
+        function initializeLibrary(name, globalVar, category) {
             const grid = document.getElementById('chaos-grid');
             const slot = document.createElement('div');
             slot.className = 'library-slot floating';
@@ -320,210 +448,148 @@
             
             try {
                 // Each library gets its own try-catch
-                switch(name) {
-                    // FRAMEWORKS
-                    case 'React':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="react-root"></div>`;
-                        grid.appendChild(slot);
-                        const root = ReactDOM.createRoot(document.getElementById('react-root'));
-                        root.render(React.createElement('div', {className: 'spinning'}, '⚛️ React 18'));
+                switch(category) {
+                    case 'framework':
+                        initializeFramework(slot, name, globalVar);
                         break;
-                        
-                    case 'Vue':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="vue-root"></div>`;
-                        grid.appendChild(slot);
-                        Vue.createApp({ template: '<div class="glitch">🟢 Vue 3</div>' }).mount('#vue-root');
+                    case '3d':
+                        initialize3D(slot, name, globalVar);
                         break;
-                        
-                    case 'Angular':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="angular-root"><div ng-app="myApp" ng-controller="MyCtrl">{{message}}</div></div>`;
-                        grid.appendChild(slot);
-                        angular.module('myApp', []).controller('MyCtrl', function($scope) {
-                            $scope.message = '🔺 Angular 1.x';
-                        });
-                        angular.bootstrap(document.getElementById('angular-root'), ['myApp']);
+                    case 'charts':
+                        initializeChart(slot, name, globalVar);
                         break;
-                        
-                    case 'Backbone':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="backbone-root"></div>`;
-                        grid.appendChild(slot);
-                        const BBView = Backbone.View.extend({
-                            render() { this.$el.html('🦴 Backbone View'); return this; }
-                        });
-                        new BBView({ el: '#backbone-root' }).render();
+                    case 'animation':
+                        initializeAnimation(slot, name, globalVar);
                         break;
-                        
-                    // 3D GRAPHICS
-                    case 'Three.js':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><canvas id="three-canvas"></canvas>`;
-                        grid.appendChild(slot);
-                        const scene = new THREE.Scene();
-                        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-                        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
-                        renderer.setSize(300, 200);
-                        const geo = new THREE.IcosahedronGeometry(1, 0);
-                        const mat = new THREE.MeshNormalMaterial();
-                        const mesh = new THREE.Mesh(geo, mat);
-                        scene.add(mesh);
-                        camera.position.z = 3;
-                        const animate = () => {
-                            requestAnimationFrame(animate);
-                            mesh.rotation.x += 0.01;
-                            mesh.rotation.y += 0.02;
-                            renderer.render(scene, camera);
-                        };
-                        animate();
+                    case 'maps':
+                        initializeMap(slot, name, globalVar);
                         break;
-                        
-                    case 'Babylon.js':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><canvas id="babylon-canvas" width="300" height="200"></canvas>`;
-                        grid.appendChild(slot);
-                        const engine = new BABYLON.Engine(document.getElementById('babylon-canvas'), true);
-                        const bScene = new BABYLON.Scene(engine);
-                        const cam = new BABYLON.ArcRotateCamera("cam", Math.PI/2, Math.PI/2.5, 5, BABYLON.Vector3.Zero(), bScene);
-                        const light2 = new BABYLON.HemisphericLight("light2", new BABYLON.Vector3(1, 1, 0), bScene);
-                        const sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", {diameter: 2}, bScene);
-                        engine.runRenderLoop(() => bScene.render());
+                    case 'audio':
+                        initializeAudio(slot, name, globalVar);
                         break;
-                        
-                    case 'PixiJS':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="pixi-container"></div>`;
-                        grid.appendChild(slot);
-                        const app = new PIXI.Application({ width: 300, height: 200, backgroundColor: 0x1099bb });
-                        document.getElementById('pixi-container').appendChild(app.view);
-                        const graphics = new PIXI.Graphics();
-                        graphics.beginFill(0x00ff00);
-                        graphics.drawCircle(150, 100, 50);
-                        graphics.endFill();
-                        app.stage.addChild(graphics);
+                    case 'ml':
+                        initializeML(slot, name, globalVar);
                         break;
-                        
-                    case 'p5.js':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="p5-container"></div>`;
-                        grid.appendChild(slot);
-                        new p5((p) => {
-                            p.setup = () => {
-                                p.createCanvas(300, 200).parent('p5-container');
-                            };
-                            p.draw = () => {
-                                p.background(0);
-                                p.fill(0, 255, 0);
-                                p.ellipse(p.sin(p.frameCount * 0.05) * 100 + 150, 100, 50);
-                            };
-                        });
-                        break;
-                        
-                    // CHARTS
-                    case 'D3.js':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><svg id="d3-svg" width="300" height="200"></svg>`;
-                        grid.appendChild(slot);
-                        const svg = d3.select('#d3-svg');
-                        svg.selectAll('circle').data([50, 100, 150, 200]).enter()
-                            .append('circle').attr('cx', d => d).attr('cy', 100).attr('r', 20)
-                            .attr('fill', '#00ff00').attr('opacity', 0.5);
-                        break;
-                        
-                    case 'ECharts':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="echarts-container" style="width:300px;height:200px;"></div>`;
-                        grid.appendChild(slot);
-                        const echart = echarts.init(document.getElementById('echarts-container'));
-                        echart.setOption({
-                            title: { text: 'ECharts', textStyle: { color: '#0f0' } },
-                            series: [{ type: 'pie', data: [{value: 335, name: 'A'}, {value: 310, name: 'B'}] }]
-                        });
-                        break;
-                        
-                    case 'Plotly':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="plotly-container" style="width:300px;height:200px;"></div>`;
-                        grid.appendChild(slot);
-                        Plotly.newPlot('plotly-container', [{
-                            x: [1,2,3,4], y: [10,11,12,13], type: 'scatter', mode: 'lines+markers'
-                        }], {paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)'});
-                        break;
-                        
-                    // ANIMATION
-                    case 'GSAP':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="gsap-target">GSAP Target</div>`;
-                        grid.appendChild(slot);
-                        gsap.to('#gsap-target', { rotation: 360, duration: 2, repeat: -1 });
-                        break;
-                        
-                    case 'Anime.js':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="anime-target" style="width:50px;height:50px;background:#0f0;"></div>`;
-                        grid.appendChild(slot);
-                        anime({ targets: '#anime-target', translateX: 250, duration: 2000, loop: true, direction: 'alternate' });
-                        break;
-                        
-                    case 'Lottie':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="lottie-container" style="width:300px;height:200px;"></div>`;
-                        grid.appendChild(slot);
-                        try {
-                            lottie.loadAnimation({
-                                container: document.getElementById('lottie-container'),
-                                path: 'https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json',
-                                renderer: 'svg',
-                                loop: true,
-                                autoplay: true
-                            });
-                        } catch(e) {
-                            document.getElementById('lottie-container').innerHTML = 'Lottie fallback: Animation loaded';
-                        }
-                        break;
-                        
-                    // MAPS
-                    case 'Leaflet':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="leaflet-map" style="width:300px;height:200px;"></div>`;
-                        grid.appendChild(slot);
-                        const map = L.map('leaflet-map').setView([51.505, -0.09], 13);
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                        L.marker([51.505, -0.09]).addTo(map);
-                        break;
-                        
-                    // AUDIO
-                    case 'Tone.js':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="tonejs-container">Tone.js Ready (muted)</div>`;
-                        grid.appendChild(slot);
-                        const synth = new Tone.Synth().toDestination();
-                        // Tone.start(); // Uncomment to enable audio
-                        break;
-                        
-                    // MACHINE LEARNING
-                    case 'TensorFlow.js':
-                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="tensorflow-container">TensorFlow v${tf.version.tfjs}</div>`;
-                        grid.appendChild(slot);
-                        break;
-                        
-                    // DEFAULT CASE FOR OTHERS
                     default:
-                        slot.innerHTML = `<div class="success-badge">LOADED</div><h3>${name}</h3><p>Library loaded successfully</p>`;
+                        // Generic initialization
+                        slot.innerHTML = `
+                            <div class="success-badge">✅ LOADED</div>
+                            <h3>${name}</h3>
+                            <p>Global: ${globalVar}</p>
+                            <small>Category: ${category}</small>
+                        `;
                         grid.appendChild(slot);
                 }
             } catch (error) {
-                // If initialization fails, show error but don't crash
-                slot.innerHTML = `
-                    <div class="failure-badge">INIT FAILED</div>
-                    <div class="error-placeholder">
-                        <h3>${name}</h3>
-                        <p>${error.message}</p>
-                    </div>
-                `;
-                grid.appendChild(slot);
+                createFailedSlot(name, error.message);
             }
         }
 
-        // CHAOS EFFECTS (independent of any library)
-        setInterval(() => {
-            document.querySelectorAll('.library-slot').forEach((el, i) => {
-                el.style.transform = `rotate(${Math.sin(Date.now() * 0.001 + i) * 2}deg)`;
-                el.style.filter = `hue-rotate(${Date.now() * 0.1 % 360}deg)`;
-            });
-        }, 50);
+        // Individual initialization functions (all wrapped in try-catch)
+        function initializeFramework(slot, name, globalVar) {
+            slot.innerHTML = `<div class="success-badge">✅ ACTIVE</div><div id="${globalVar}-root"></div>`;
+            document.getElementById('chaos-grid').appendChild(slot);
+            
+            try {
+                if (globalVar === 'React' && typeof ReactDOM !== 'undefined') {
+                    const root = ReactDOM.createRoot(document.getElementById('React-root'));
+                    root.render(React.createElement('div', {className: 'spinning'}, '⚛️ React 18'));
+                } else if (globalVar === 'Vue') {
+                    Vue.createApp({ template: '<div class="glitch">🟢 Vue 3</div>' }).mount('#Vue-root');
+                } else if (globalVar === 'Alpine') {
+                    // Alpine auto-initializes
+                    document.getElementById('Alpine-root').innerHTML = '<div x-data="{ msg: \'🏔️ Alpine.js\' }" x-text="msg"></div>';
+                } else {
+                    document.getElementById(`${globalVar}-root`).innerHTML = `<h3>${name}</h3><p>Framework loaded</p>`;
+                }
+            } catch (e) {
+                throw new Error(`Init failed: ${e.message}`);
+            }
+        }
 
-        // FINAL CHAOS AFTER 5 SECONDS
-        setTimeout(() => {
-            document.body.style.animation = 'spin 10s linear infinite';
-            document.body.style.filter = 'invert(1)';
-        }, 5000);
+        function initialize3D(slot, name, globalVar) {
+            slot.innerHTML = `<div class="success-badge">✅ 3D ACTIVE</div><canvas id="${globalVar}-canvas" width="300" height="200"></canvas>`;
+            document.getElementById('chaos-grid').appendChild(slot);
+            
+            try {
+                if (globalVar === 'THREE') {
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, 1.5, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('THREE-canvas'), alpha: true });
+                    renderer.setSize(300, 200);
+                    const geo = new THREE.IcosahedronGeometry(1, 0);
+                    const mat = new THREE.MeshNormalMaterial();
+                    const mesh = new THREE.Mesh(geo, mat);
+                    scene.add(mesh);
+                    camera.position.z = 3;
+                    const animate = () => {
+                        requestAnimationFrame(animate);
+                        mesh.rotation.x += 0.01; mesh.rotation.y += 0.02;
+                        renderer.render(scene, camera);
+                    };
+                    animate();
+                } else if (globalVar === 'PIXI') {
+                    const app = new PIXI.Application({ width: 300, height: 200, backgroundColor: 0x1099bb });
+                    document.getElementById('PIXI-canvas').replaceWith(app.view);
+                    const graphics = new PIXI.Graphics();
+                    graphics.beginFill(0x00ff00); graphics.drawCircle(150, 100, 50); graphics.endFill();
+                    app.stage.addChild(graphics);
+                } else {
+                    document.getElementById(`${globalVar}-canvas`).style.background = 'linear-gradient(45deg, #0f0, #f0f)';
+                }
+            } catch (e) {
+                throw new Error(`3D Init failed: ${e.message}`);
+            }
+        }
+
+        // ... Similar safe functions for charts, animations, etc.
+
+        function createFailedSlot(name, error = 'Library not loaded') {
+            const grid = document.getElementById('chaos-grid');
+            const slot = document.createElement('div');
+            slot.className = 'library-slot';
+            slot.innerHTML = `
+                <div class="failure-badge">❌ FAILED</div>
+                <div class="error-placeholder">
+                    <h3>${name}</h3>
+                    <p>${error}</p>
+                    <small>Chaos continues uninterrupted.</small>
+                </div>
+            `;
+            grid.appendChild(slot);
+        }
+
+        function startChaosEffects() {
+            // Global chaos effects that don't depend on any library
+            setInterval(() => {
+                document.querySelectorAll('.library-slot').forEach((el, i) => {
+                    el.style.transform = `rotate(${Math.sin(Date.now() * 0.001 + i) * 2}deg)`;
+                    el.style.filter = `hue-rotate(${Date.now() * 0.1 % 360}deg) saturate(2)`;
+                });
+            }, 50);
+
+            // Final chaos after 10 seconds
+            setTimeout(() => {
+                document.body.style.animation = 'spin 20s linear infinite';
+                document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+            }, 10000);
+        }
+
+        // Update memory usage
+        setInterval(() => {
+            if (performance.memory) {
+                const memMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
+                document.getElementById('memory-mb').textContent = memMB;
+                const memPercent = Math.min((memMB / 2000) * 100, 100); // Scale to 2GB
+                document.getElementById('memory-bar').style.width = memPercent + '%';
+                
+                // Warning colors
+                const bar = document.getElementById('memory-bar');
+                if (memPercent > 75) bar.style.background = '#ff0000';
+                else if (memPercent > 50) bar.style.background = '#ffaa00';
+                else bar.style.background = '#00ff00';
+            }
+        }, 500);
     </script>
 </body>
 </html>
