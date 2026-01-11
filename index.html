@@ -789,21 +789,30 @@ boosters.forEach(booster => {
                         const script = document.createElement('script');
                         script.src = lib.url;
                         script.defer = true;
-                        
-                        script.onload = () => {
-                            loaded++;
-                            checking--;
-                            createCard(lib, 'success');
-                            updateProgress();
-                        };
-                        
-                        script.onerror = () => {
-                            failed++;
-                            checking--;
-                            //createCard(lib, 'failed');
-                            updateProgress();
-                        };
-                        
+script.onload = () => {
+    loaded++;
+    checking--;
+    createCard(lib, 'success');
+    initializeLibrary(lib);
+    updateProgress();
+    
+    // 🔥 Free successful scripts too (they're already executed)
+    script.remove();
+    script = null;
+};
+// 🔥 REPLACE your existing onerror handler with this:
+
+script.onerror = () => {
+    failed++;
+    checking--;
+    createCard(lib, 'failed');
+    updateProgress();
+    
+    // 🔥 FREE MEMORY (remove from DOM, null reference, delete from array)
+    script.remove(); // Remove from DOM
+    script = null; // Nullify reference
+    libraryList[lib.id] = null; // Delete from tracking array
+};
                         head.appendChild(script);
                     }
                 }, Math.floor(batch / 10)); // Aggressive timing
