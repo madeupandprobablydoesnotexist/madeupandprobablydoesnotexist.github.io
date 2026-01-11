@@ -516,7 +516,20 @@
             { name: 'Flow', pkg: 'flow-bin', type: 'utility', maxVer: 1, cdns: ['jsdelivr'] },
             { name: 'TS.Compiler', pkg: 'typescript', type: 'utility', maxVer: 5, cdns: ['jsdelivr', 'cdnjs'] },
             { name: 'SWC', pkg: '@swc/wasm-web', type: 'wasm', maxVer: 1, cdns: ['jsdelivr'] },
-        ];
+        
+    { name: 'React', pkg: 'react', type: 'framework', maxVer: 50, cdns: ['unpkg', 'jsdelivr', 'cdnjs', 'skypack', 'esmsh'] },
+    { name: 'jQuery', pkg: 'jquery', type: 'framework', maxVer: 50, cdns: ['jquery', 'jsdelivr', 'cdnjs'] },
+    { name: 'Vue', pkg: 'vue', type: 'framework', maxVer: 50, cdns: ['unpkg', 'jsdelivr', 'cdnjs', 'skypack', 'esmsh'] },
+    { name: 'Angular', pkg: 'angular', type: 'framework', maxVer: 50, cdns: ['google', 'cdnjs'] },
+    { name: 'Svelte', pkg: 'svelte', type: 'framework', maxVer: 50, cdns: ['unpkg', 'jsdelivr', 'cdnjs'] },
+    { name: 'Preact', pkg: 'preact', type: 'framework', maxVer: 50, cdns: ['unpkg', 'jsdelivr', 'cdnjs'] },
+    { name: 'Three.js', pkg: 'three', type: '3d', maxVer: 150, cdns: ['jsdelivr', 'cdnjs', 'unpkg'] },
+    { name: 'Babylon.js', pkg: 'babylonjs', type: '3d', maxVer: 100, cdns: ['jsdelivr', 'cdnjs', 'unpkg'] },
+    { name: 'D3', pkg: 'd3', type: 'charts', maxVer: 100, cdns: ['jsdelivr', 'cdnjs', 'unpkg'] },
+    { name: 'Chart.js', pkg: 'chart.js', type: 'charts', maxVer: 50, cdns: ['jsdelivr', 'cdnjs'] },
+    { name: 'GSAP', pkg: 'gsap', type: 'animation', maxVer: 50, cdns: ['cdnjs', 'jsdelivr', 'unpkg'] },
+    { name: 'Axios', pkg: 'axios', type: 'utility', maxVer: 50, cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh'] },
+];
 
         // 🔥 RESEARCHED CDN LIST (20+ unique CDNs)
         const megaCdns = {
@@ -550,15 +563,20 @@
         };
 
         // 🔥 FAST VERSION GENERATOR
-        function generateVersions(maxMajor) {
-            const versions = [];
-            for (let major = 0; major <= maxMajor; major++) {
-                for (let minor = 0; minor <= 9; minor++) {
-                    versions.push(`${major}.${minor}`);
-                }
+// 🔥 REPLACE with aggressive version generator
+function generateVersions(maxMajor) {
+    const versions = [];
+    // Generate 0.0 to maxMajor.9 + 0.0.0 to maxMajor.9.9
+    for (let major = 0; major <= maxMajor; major++) {
+        for (let minor = 0; minor <= 9; minor++) {
+            versions.push(`${major}.${minor}`);
+            for (let patch = 0; patch <= 9; patch++) {
+                versions.push(`${major}.${minor}.${patch}`);
             }
-            return versions;
         }
+    }
+    return versions;
+}
 // 🔥 REPLACE THIS ENTIRE FUNCTION
 function buildUrl(template, version, cdnKey) {
     const { pkg, name } = template;
