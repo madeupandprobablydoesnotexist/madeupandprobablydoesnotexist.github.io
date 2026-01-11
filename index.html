@@ -3,441 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAXIMUM OVERLOAD - All Libraries At Once</title>
+    <title>CHAOS ENGINE v2.0 - 100 Libraries</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Courier New', monospace; 
-            background: radial-gradient(circle, #0f0c29, #302b63, #24243e);
-            color: #fff; 
+            background: radial-gradient(circle, #0a0a0a, #1a1a2e, #16213e);
+            color: #00ff00; 
             overflow-x: hidden;
+            cursor: crosshair;
         }
-        .absolute-layer { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            pointer-events: none; 
-            z-index: 1; 
+        .chaos-header { 
+            position: fixed; top: 0; left: 0; right: 0; 
+            background: rgba(0,0,0,0.95); padding: 15px; 
+            z-index: 9999; border-bottom: 2px solid #ff00ff;
+            font-size: 11px;
         }
-        .library-container { 
-            position: relative; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            margin: 10px; 
-            padding: 10px; 
-            background: rgba(0,0,0,0.3); 
-            border-radius: 5px;
-            pointer-events: auto;
+        .status-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 5px; margin-top: 10px;
         }
-        .header { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            background: rgba(0,0,0,0.9); 
-            padding: 20px; 
-            z-index: 1000; 
-            text-align: center;
-            border-bottom: 2px solid #00ff00;
+        .status-item { 
+            padding: 5px; background: rgba(255,0,255,0.1); 
+            border: 1px solid #ff00ff; border-radius: 3px;
+            font-size: 10px; overflow: hidden;
         }
-        .blink { animation: blink 0.5s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 15px; margin-top: 100px; }
-        canvas { max-width: 100%; border: 1px solid #333; }
-        svg { background: rgba(0,0,0,0.5); }
-        #particles-canvas { position: fixed; top: 0; left: 0; z-index: 0; }
-        .framework-box { border: 1px solid #00ffff; padding: 20px; margin: 10px; display: inline-block; min-width: 200px; }
-        .stat-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); padding: 10px; z-index: 1000; font-size: 12px; }
+        .status-item.loaded { border-color: #00ff00; background: rgba(0,255,0,0.1); }
+        .status-item.failed { border-color: #ff0000; background: rgba(255,0,0,0.1); }
+        .library-slot { 
+            position: relative; border: 1px dashed #333; 
+            margin: 5px; padding: 10px; min-height: 150px;
+            background: rgba(0,0,0,0.5); border-radius: 3px;
+            transition: all 0.3s;
+        }
+        .library-slot:hover { transform: scale(1.02); border-color: #00ffff; }
+        .error-placeholder { 
+            background: rgba(255,0,0,0.2); padding: 20px; 
+            border: 2px dotted #ff0000; border-radius: 5px;
+        }
+        .success-badge { 
+            position: absolute; top: 5px; right: 5px; 
+            background: #00ff00; color: #000; 
+            padding: 2px 6px; border-radius: 3px; 
+            font-size: 10px; font-weight: bold;
+        }
+        .failure-badge { 
+            position: absolute; top: 5px; right: 5px; 
+            background: #ff0000; color: #fff; 
+            padding: 2px 6px; border-radius: 3px; 
+            font-size: 10px; font-weight: bold;
+        }
+        .chaos-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 10px; margin-top: 200px; padding: 10px;
+        }
+        canvas { max-width: 100%; background: rgba(0,0,0,0.3); }
+        .floating { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .spinning { animation: spin 2s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .glitch { animation: glitch 0.3s infinite; }
+        @keyframes glitch { 
+            0% { transform: translate(0); } 
+            20% { transform: translate(-2px, 2px); } 
+            40% { transform: translate(-2px, -2px); } 
+            60% { transform: translate(2px, 2px); } 
+            80% { transform: translate(2px, -2px); } 
+            100% { transform: translate(0); } 
+        }
+        .memory-bar { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            height: 20px; background: #ff00ff; 
+            transition: width 0.5s; z-index: 9999;
+        }
     </style>
 </head>
 <body>
-    <!-- FIXED HEADER -->
-    <div class="header">
-        <h1 class="blink">🚨 MAXIMUM OVERLOAD ENGAGED 🚨</h1>
-        <p>Loading <span id="lib-counter">0</span>/55 libraries... Memory: <span id="mem-usage">0</span>MB</p>
+    <!-- CHAOS HEADER -->
+    <div class="chaos-header">
+        <h1 class="glitch">🚨 CHAOS ENGINE v2.0 - 100 LIBRARIES 🚨</h1>
+        <div>Loaded: <span id="loaded-count">0</span>/100 | Failed: <span id="failed-count">0</span> | Memory: <span id="memory-mb">0</span>MB</div>
+        <div class="status-grid" id="status-grid"></div>
     </div>
 
-    <!-- PARTICLES BACKGROUND -->
-    <canvas id="particles-canvas" class="absolute-layer"></canvas>
+    <!-- MEMORY USAGE BAR -->
+    <div class="memory-bar" id="memory-bar"></div>
 
-    <!-- 3D OVERLAY -->
-    <div id="threejs-container" class="absolute-layer"></div>
+    <!-- CHAOS GRID -->
+    <div class="chaos-grid" id="chaos-grid"></div>
 
-    <!-- BABELON.JS ENGINE -->
-    <canvas id="babylon-canvas" class="absolute-layer"></canvas>
-
-    <!-- PHASER GAME -->
-    <div id="phaser-game" class="absolute-layer"></div>
-
-    <!-- MAIN CONTENT GRID -->
-    <div class="grid" id="main-grid">
-        <!-- FRAMEWORKS WILL MOUNT HERE -->
-        <div id="react-root" class="library-container"></div>
-        <div id="vue-root" class="library-container"></div>
-        <div id="angular-root" class="library-container"></div>
-        <div id="svelte-root" class="library-container"></div>
-        <div id="ember-root" class="library-container"></div>
-        <div id="backbone-root" class="library-container"></div>
-        
-        <!-- CHARTS -->
-        <div id="d3-container" class="library-container"><svg id="d3-svg"></svg></div>
-        <div id="echarts-container" class="library-container" style="width: 600px; height: 400px;"></div>
-        <div id="plotly-container" class="library-container" style="width: 600px; height: 400px;"></div>
-        <div id="chartjs-container" class="library-container"><canvas id="chartjs-canvas"></canvas></div>
-        <div id="apexcharts-container" class="library-container"><div id="apexcharts"></div></div>
-        <div id="c3-container" class="library-container"><div id="c3-chart"></div></div>
-        <div id="sigma-container" class="library-container"><div id="sigma"></div></div>
-        
-        <!-- MAPS -->
-        <div id="leaflet-map" class="library-container" style="height: 300px;"></div>
-        <div id="mapbox-container" class="library-container" style="height: 300px;"></div>
-        <div id="cesium-container" class="library-container" style="height: 300px;"></div>
-        
-        <!-- ANIMATIONS -->
-        <div id="lottie-container" class="library-container"></div>
-        <div id="vivus-container" class="library-container"><svg id="vivus-svg" width="200" height="200"><circle cx="100" cy="100" r="80" fill="none" stroke="#fff" stroke-width="5"/></svg></div>
-        <div id="p5-container" class="library-container"></div>
-        
-        <!-- AUDIO -->
-        <div id="tonejs-container" class="library-container"></div>
-        <div id="howler-container" class="library-container"></div>
-        
-        <!-- PIXI.JS -->
-        <div id="pixi-container" class="library-container"></div>
-        
-        <!-- A-FRAME VR -->
-        <div id="aframe-container" class="library-container"></div>
-        
-        <!-- MATTER.JS PHYSICS -->
-        <div id="matter-container" class="library-container"></div>
-        
-        <!-- MACHINE LEARNING -->
-        <div id="tensorflow-container" class="library-container"></div>
-        <div id="ml5-container" class="library-container"></div>
-        
-        <!-- UI KIT COMPONENTS -->
-        <div id="bootstrap-components" class="library-container"></div>
-        <div id="antd-components" class="library-container"></div>
-        
-        <!-- SPECIAL EFFECTS -->
-        <div id="pixi-filters" class="library-container"></div>
-        <div id="glfx-container" class="library-container"></div>
-    </div>
-
-    <!-- BOOTSTRAP MODALS -->
-    <div id="bootstrap-modal"></div>
-
-    <!-- A-FRAME VR SCENE -->
-    <div id="vr-scene" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 300px; z-index: 500;">
-        <a-scene embedded>
-            <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-            <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-            <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-            <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-            <a-sky color="#ECECEC"></a-sky>
-        </a-scene>
-    </div>
-
-    <!-- STATS BAR -->
-    <div class="stat-bar" id="stats-bar">
-        <span id="loaded-frameworks"></span> | 
-        <span id="active-animations"></span> | 
-        <span id="webgl-contexts"></span> | 
-        <span id="memory-warning"></span>
-    </div>
-
-    <!-- ==================== CDN LIBRARY SCRIPTS (55 TOTAL) ==================== -->
+    <!-- ==================== 100 CDN LIBRARIES ==================== -->
     
-    <!-- CORE FRAMEWORKS -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ember.js/4.12.0/ember.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.1/backbone-min.js"></script>
-    <script src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js" defer></script>
-    
-    <!-- GRAPHICS & 3D -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js"></script>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    
-    <!-- CHARTS & DATA VIZ -->
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
-    <script src="https://unpkg.com/timelines-chart@2.12.1/dist/timelines-chart.min.js"></script>
-    
-    <!-- ANIMATION -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.6/vivus.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-    
-    <!-- MAPS -->
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- PHASE 1: CORE FRAMEWORKS (15) -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" onload="libLoaded('React')" onerror="libFailed('React')"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" onload="libLoaded('ReactDOM')" onerror="libFailed('ReactDOM')"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js" onload="libLoaded('Vue')" onerror="libFailed('Vue')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" onload="libLoaded('Angular')" onerror="libFailed('Angular')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ember.js/4.12.0/ember.min.js" onload="libLoaded('Ember')" onerror="libFailed('Ember')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.1/backbone-min.js" onload="libLoaded('Backbone')" onerror="libFailed('Backbone')"></script>
+    <script src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js" defer onload="libLoaded('Alpine')" onerror="libFailed('Alpine')"></script>
+    <script src="https://unpkg.com/preact@10.19.3/dist/preact.min.js" onload="libLoaded('Preact')" onerror="libFailed('Preact')"></script>
+    <script src="https://unpkg.com/inferno@8.2.3/dist/inferno.min.js" onload="libLoaded('Inferno')" onerror="libFailed('Inferno')"></script>
+    <script src="https://unpkg.com/mithril@2.2.2/mithril.min.js" onload="libLoaded('Mithril')" onerror="libFailed('Mithril')"></script>
+    <script src="https://unpkg.com/riot@7.1.0/riot.min.js" onload="libLoaded('Riot')" onerror="libFailed('Riot')"></script>
+    <script src="https://unpkg.com/hyperapp@2.0.22/index.js" onload="libLoaded('Hyperapp')" onerror="libFailed('Hyperapp')"></script>
+    <script src="https://unpkg.com/surplus@0.5.5/compiler/index.js" onload="libLoaded('Surplus')" onerror="libFailed('Surplus')"></script>
+    <script src="https://unpkg.com/maquette@4.0.3/dist/maquette.min.js" onload="libLoaded('Maquette')" onerror="libFailed('Maquette')"></script>
+    <script src="https://unpkg.com/crank@0.5.1/crank.js" onload="libLoaded('Crank')" onerror="libFailed('Crank')"></script>
+
+    <!-- PHASE 2: GRAPHICS & 3D (20) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onload="libLoaded('Three.js')" onerror="libFailed('Three.js')"></script>
+    <script src="https://cdn.babylonjs.com/babylon.js" onload="libLoaded('Babylon.js')" onerror="libFailed('Babylon.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js" onload="libLoaded('Phaser')" onerror="libFailed('Phaser')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.3.2/pixi.min.js" onload="libLoaded('PixiJS')" onerror="libFailed('PixiJS')"></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js" onload="libLoaded('A-Frame')" onerror="libFailed('A-Frame')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/two.js@0.8.13/build/two.min.js" onload="libLoaded('Two.js')" onerror="libFailed('Two.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.17/paper-full.min.js" onload="libLoaded('Paper.js')" onerror="libFailed('Paper.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/easeljs/1.0.2/easeljs.min.js" onload="libLoaded('EaselJS')" onerror="libFailed('EaselJS')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/konva@9.2.3/konva.min.js" onload="libLoaded('Konva')" onerror="libFailed('Konva')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" onload="libLoaded('Fabric.js')" onerror="libFailed('Fabric.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/zdog@1.1.3/dist/zdog.dist.min.js" onload="libLoaded('Zdog')" onerror="libFailed('Zdog')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.min.js" onload="libLoaded('p5.js')" onerror="libFailed('p5.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.min.js" onload="libLoaded('p5.sound')" onerror="libFailed('p5.sound')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" onload="libLoaded('Matter.js')" onerror="libFailed('Matter.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p2.js/0.7.1/p2.min.js" onload="libLoaded('p2.js')" onerror="libFailed('p2.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/planck-js/0.3.31/planck-with-testbed.min.js" onload="libLoaded('Planck.js')" onerror="libFailed('Planck.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js" onload="libLoaded('Cannon.js')" onerror="libFailed('Cannon.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/polydecomp.js/0.1.1/polydecomp.min.js" onload="libLoaded('PolyDecomp')" onerror="libFailed('PolyDecomp')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crafty/0.9.0/crafty.min.js" onload="libLoaded('Crafty')" onerror="libFailed('Crafty')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/melonjs/13.1.0/melonjs.min.js" onload="libLoaded('MelonJS')" onerror="libFailed('MelonJS')"></script>
+
+    <!-- PHASE 3: ANIMATION (15) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js" onload="libLoaded('GSAP')" onerror="libFailed('GSAP')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js" onload="libLoaded('GSAP ScrollTrigger')" onerror="libFailed('GSAP ScrollTrigger')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" onload="libLoaded('Anime.js')" onerror="libFailed('Anime.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js" onload="libLoaded('Velocity.js')" onerror="libFailed('Velocity.js')"></script>
+    <script src="https://unpkg.com/popmotion@11.0.5/dist/popmotion.js" onload="libLoaded('Popmotion')" onerror="libFailed('Popmotion')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mo-js/0.288.2/mo.min.js" onload="libLoaded('Mo.js')" onerror="libFailed('Mo.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" onload="libLoaded('Lottie')" onerror="libFailed('Lottie')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.6/vivus.min.js" onload="libLoaded('Vivus')" onerror="libFailed('Vivus')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js" onload="libLoaded('Typed.js')" onerror="libFailed('Typed.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js" onload="libLoaded('Waypoints')" onerror="libFailed('Waypoints')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js" onload="libLoaded('Tilt.js')" onerror="libFailed('Tilt.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" onload="libLoaded('Splide')" onerror="libFailed('Splide')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11.0.5/swiper-bundle.min.js" onload="libLoaded('Swiper')" onerror="libFailed('Swiper')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flip/1.1.1/flip.min.js" onload="libLoaded('Flip')" onerror="libFailed('Flip')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollreveal/4.0.9/scrollreveal.min.js" onload="libLoaded('ScrollReveal')" onerror="libFailed('ScrollReveal')"></script>
+
+    <!-- PHASE 4: DATA VISUALIZATION (15) -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js" onload="libLoaded('D3.js')" onerror="libFailed('D3.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js" onload="libLoaded('ECharts')" onerror="libFailed('ECharts')"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" onload="libLoaded('Plotly')" onerror="libFailed('Plotly')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" onload="libLoaded('Chart.js')" onerror="libFailed('Chart.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js" onload="libLoaded('ApexCharts')" onerror="libFailed('ApexCharts')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js" onload="libLoaded('C3.js')" onerror="libFailed('C3.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js" onload="libLoaded('Sigma.js')" onerror="libFailed('Sigma.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highcharts@11.3.0/highcharts.js" onload="libLoaded('Highcharts')" onerror="libFailed('Highcharts')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js" onload="libLoaded('Frappe Charts')" onerror="libFailed('Frappe Charts')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartist@1.3.0/dist/chartist.min.js" onload="libLoaded('Chartist')" onerror="libFailed('Chartist')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@nivo/core@0.84.0/umd/nivo-core.min.js" onload="libLoaded('Nivo Core')" onerror="libFailed('Nivo Core')"></script>
+    <script src="https://unpkg.com/react-charts@3.0.0-beta.38/dist/index.umd.js" onload="libLoaded('React Charts')" onerror="libFailed('React Charts')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/billboard.js@3.10.2/dist/billboard.min.js" onload="libLoaded('Billboard.js')" onerror="libFailed('Billboard.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js" onload="libLoaded('Vis Network')" onerror="libFailed('Vis Network')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cal-heatmap@4.0.4/dist/cal-heatmap.min.js" onload="libLoaded('Cal-Heatmap')" onerror="libFailed('Cal-Heatmap')"></script>
+
+    <!-- PHASE 5: MAPS & GEO (10) -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" onload="libLoaded('Leaflet')" onerror="libFailed('Leaflet')"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js" onload="libLoaded('Mapbox GL')" onerror="libFailed('Mapbox GL')"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js"></script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js" onload="libLoaded('Cesium')" onerror="libFailed('Cesium')"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-    
-    <!-- AUDIO -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
-    
-    <!-- UI KITS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/ol@8.2.0/dist/ol.js" onload="libLoaded('OpenLayers')" onerror="libFailed('OpenLayers')"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ol@8.2.0/ol.css">
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js" onload="libLoaded('Turf.js')" onerror="libFailed('Turf.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js" onload="libLoaded('TopoJSON')" onerror="libFailed('TopoJSON')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-geo@3.1.0/dist/d3-geo.min.js" onload="libLoaded('D3 Geo')" onerror="libFailed('D3 Geo')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/geolib@3.3.4/lib/geolib.min.js" onload="libLoaded('GeoLib')" onerror="libFailed('GeoLib')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/proj4@2.9.2/dist/proj4.js" onload="libLoaded('Proj4')" onerror="libFailed('Proj4')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" onload="libLoaded('Leaflet MarkerCluster')" onerror="libFailed('Leaflet MarkerCluster')"></script>
+
+    <!-- PHASE 6: AUDIO & MEDIA (10) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" onload="libLoaded('Tone.js')" onerror="libFailed('Tone.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" onload="libLoaded('Howler.js')" onload="libLoaded('Howler.js')" onerror="libFailed('Howler.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/addons/p5.sound.min.js" onload="libLoaded('p5.sound')" onerror="libFailed('p5.sound')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.7.3/wavesurfer.min.js" onload="libLoaded('WaveSurfer')" onerror="libFailed('WaveSurfer')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vudio@2.0.1/dist/vudio.min.js" onload="libLoaded('Vudio')" onerror="libFailed('Vudio')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pizzicato@0.6.4/distr/Pizzicato.min.js" onload="libLoaded('Pizzicato')" onerror="libFailed('Pizzicato')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/webpd@2.1.1/dist/webpd.min.js" onload="libLoaded('WebPd')" onerror="libFailed('WebPd')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/crunker@1.0.0/dist/crunker.min.js" onload="libLoaded('Crunker')" onerror="libFailed('Crunker')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dancer@0.3.3/dancer.min.js" onload="libLoaded('Dancer')" onerror="libFailed('Dancer')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/wad@0.1.0/build/wad.min.js" onload="libLoaded('Wad')" onerror="libFailed('Wad')"></script>
+
+    <!-- PHASE 7: UI KITS & STYLES (15) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" onload="libLoaded('Bootstrap')" onerror="libFailed('Bootstrap')"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/antd.min.js" onload="libLoaded('Ant Design')" onerror="libFailed('Ant Design')"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.12.8/dist/reset.css">
-    
-    <!-- MACHINE LEARNING -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js"></script>
-    <script src="https://unpkg.com/ml5@1/dist/ml5.min.js"></script>
-    
-    <!-- PARTICLES -->
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    
-    <!-- IMAGE PROCESSING -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/glfx-js/0.0.1/glfx.min.js"></script>
-    
-    <!-- REAL-TIME -->
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    
-    <!-- ==================== AUTO-INITIALIZATION SCRIPT ==================== -->
+    <script src="https://unpkg.com/emotion@11.11.0/dist/emotion.umd.min.js" onload="libLoaded('Emotion')" onerror="libFailed('Emotion')"></script>
+    <script src="https://unpkg.com/styled-components@6.1.1/dist/styled-components.min.js" onload="libLoaded('Styled Components')" onerror="libFailed('Styled Components')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.4/umd/material-ui.production.min.js" onload="libLoaded('Material-UI')" onerror="libFailed('Material-UI')"></script>
+    <script src="https://unpkg.com/chakra-ui@0.8.0/dist/umd/chakra-ui.js" onload="libLoaded('Chakra UI')" onerror="libFailed('Chakra UI')"></script>
+    <script src="https://unpkg.com/primevue@3.40.1/primevue.all.min.js" onload="libLoaded('PrimeVue')" onerror="libFailed('PrimeVue')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js" onload="libLoaded('Semantic UI')" onerror="libFailed('Semantic UI')"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" onload="libLoaded('Bulma CSS')" onerror="libFailed('Bulma CSS')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" onload="libLoaded('Tailwind CSS')" onerror="libFailed('Tailwind CSS')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.6/dist/vuetify.min.js" onload="libLoaded('Vuetify')" onerror="libFailed('Vuetify')"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.4.6/dist/vuetify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/index.js" onload="libLoaded('Element UI')" onerror="libFailed('Element UI')"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/@blueprintjs/core@5.6.0/lib/cjs/blueprint.js" onload="libLoaded('Blueprint.js')" onerror="libFailed('Blueprint.js')"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@blueprintjs/core@5.6.0/lib/css/blueprint.css">
+
+    <!-- PHASE 8: MACHINE LEARNING (10) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js" onload="libLoaded('TensorFlow.js')" onerror="libFailed('TensorFlow.js')"></script>
+    <script src="https://unpkg.com/ml5@1/dist/ml5.min.js" onload="libLoaded('ml5.js')" onerror="libFailed('ml5.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js" onload="libLoaded('TensorFlow Vis')" onerror="libFailed('TensorFlow Vis')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js" onload="libLoaded('MobileNet')" onerror="libFailed('MobileNet')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js" onload="libLoaded('Coco SSD')" onerror="libFailed('Coco SSD')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2/dist/posenet.min.js" onload="libLoaded('PoseNet')" onerror="libFailed('PoseNet')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose@0.0.7/dist/handpose.min.js" onload="libLoaded('HandPose')" onerror="libFailed('HandPose')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh@0.0.5/dist/facemesh.min.js" onload="libLoaded('FaceMesh')" onerror="libFailed('FaceMesh')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@1.3.3/dist/universal-sentence-encoder.min.js" onload="libLoaded('USE')" onerror="libFailed('USE')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-automl@1.3.0/dist/tf-automl.min.js" onload="libLoaded('TF AutoML')" onerror="libFailed('TF AutoML')"></script>
+
+    <!-- PHASE 9: UTILITY & TOOLS (15) -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" onload="libLoaded('Lodash')" onerror="libFailed('Lodash')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ramda@0.29.0/dist/ramda.min.js" onload="libLoaded('Ramda')" onerror="libFailed('Ramda')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/immutable@4.3.4/dist/immutable.min.js" onload="libLoaded('Immutable.js')" onerror="libFailed('Immutable.js')"></script>
+    <script src="https://unpkg.com/axios@1.6.5/dist/axios.min.js" onload="libLoaded('Axios')" onerror="libFailed('Axios')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js" onload="libLoaded('Day.js')" onerror="libFailed('Day.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js" onload="libLoaded('Luxon')" onerror="libFailed('Luxon')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@3.0.6/index.min.js" onload="libLoaded('date-fns')" onerror="libFailed('date-fns')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" onload="libLoaded('Moment.js')" onerror="libFailed('Moment.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js" onload="libLoaded('Validate.js')" onerror="libFailed('Validate.js')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ajv@8.12.0/dist/ajv.min.js" onload="libLoaded('Ajv')" onerror="libFailed('Ajv')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/parsimmon@1.18.1/build/parsimmon.browser.min.js" onload="libLoaded('Parsimmon')" onerror="libFailed('Parsimmon')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/comlink@4.4.1/dist/umd/comlink.min.js" onload="libLoaded('Comlink')" onerror="libFailed('Comlink')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/ffmpeg.min.js" onload="libLoaded('FFmpeg')" onerror="libFailed('FFmpeg')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/wasm-feature-detect@1.6.1/dist/umd/index.min.js" onload="libLoaded('WASM Feature Detect')" onerror="libFailed('WASM Feature Detect')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" onload="libLoaded('QRCode')" onerror="libFailed('QRCode')"></script>
+
+    <!-- PHASE 10: REAL-TIME & WEBSOCKETS (5) -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" onload="libLoaded('Socket.IO')" onerror="libFailed('Socket.IO')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.4/dist/browser/signalr.min.js" onload="libLoaded('SignalR')" onerror="libFailed('SignalR')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reconnecting-websocket@4.4.0/dist/reconnecting-websocket-mjs.js" onload="libLoaded('Reconnecting WebSocket')" onerror="libFailed('Reconnecting WebSocket')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js" onload="libLoaded('PeerJS')" onerror="libFailed('PeerJS')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js" onload="libLoaded('Simple Peer')" onerror="libFailed('Simple Peer')"></script>
+
+    <!-- ==================== CORE CHAOS ENGINE ==================== -->
     <script>
-        // GLOBAL COUNTER
-        window.libraryLoadCount = 0;
-        const totalLibs = 55;
-        
-        // INCREMENT COUNTER AS SCRIPTS LOAD
-        document.querySelectorAll('script[src]').forEach(script => {
-            script.onload = () => {
-                window.libraryLoadCount++;
-                document.getElementById('lib-counter').textContent = window.libraryLoadCount;
-                updateMemoryUsage();
-            };
-        });
-        
-        function updateMemoryUsage() {
+        // LIBRARY STATUS TRACKER
+        window.libraryStatus = {};
+        window.loadedLibs = 0;
+        window.failedLibs = 0;
+        window.totalLibs = 100;
+
+        function libLoaded(name) {
+            window.libraryStatus[name] = 'loaded';
+            window.loadedLibs++;
+            updateStatusDisplay();
+            initializeLibrary(name);
+        }
+
+        function libFailed(name) {
+            window.libraryStatus[name] = 'failed';
+            window.failedLibs++;
+            updateStatusDisplay();
+            createFailedSlot(name);
+        }
+
+        function updateStatusDisplay() {
+            document.getElementById('loaded-count').textContent = window.loadedLibs;
+            document.getElementById('failed-count').textContent = window.failedLibs;
+            
+            // Update memory usage
             if (performance.memory) {
                 const memMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
-                document.getElementById('mem-usage').textContent = memMB;
-                if (memMB > 500) {
-                    document.getElementById('memory-warning').textContent = `⚠️ MEMORY: ${memMB}MB`;
+                document.getElementById('memory-mb').textContent = memMB;
+                const memPercent = Math.min((memMB / 1000) * 100, 100);
+                document.getElementById('memory-bar').style.width = memPercent + '%';
+            }
+            
+            // Update status grid
+            const grid = document.getElementById('status-grid');
+            grid.innerHTML = '';
+            Object.entries(window.libraryStatus).forEach(([name, status]) => {
+                const item = document.createElement('div');
+                item.className = `status-item ${status}`;
+                item.textContent = `${status === 'loaded' ? '✅' : '❌'} ${name}`;
+                grid.appendChild(item);
+            });
+        }
+
+        function createFailedSlot(name) {
+            const grid = document.getElementById('chaos-grid');
+            const slot = document.createElement('div');
+            slot.className = 'library-slot';
+            slot.innerHTML = `
+                <div class="failure-badge">FAILED</div>
+                <div class="error-placeholder">
+                    <h3>${name}</h3>
+                    <p>Library failed to load or doesn't exist</p>
+                    <small>This is fine. Chaos continues.</small>
+                </div>
+            `;
+            grid.appendChild(slot);
+        }
+
+        function initializeLibrary(name) {
+            const grid = document.getElementById('chaos-grid');
+            const slot = document.createElement('div');
+            slot.className = 'library-slot floating';
+            slot.id = `slot-${name.replace(/\s/g, '-')}`;
+            
+            try {
+                // Each library gets its own try-catch
+                switch(name) {
+                    // FRAMEWORKS
+                    case 'React':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="react-root"></div>`;
+                        grid.appendChild(slot);
+                        const root = ReactDOM.createRoot(document.getElementById('react-root'));
+                        root.render(React.createElement('div', {className: 'spinning'}, '⚛️ React 18'));
+                        break;
+                        
+                    case 'Vue':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="vue-root"></div>`;
+                        grid.appendChild(slot);
+                        Vue.createApp({ template: '<div class="glitch">🟢 Vue 3</div>' }).mount('#vue-root');
+                        break;
+                        
+                    case 'Angular':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="angular-root"><div ng-app="myApp" ng-controller="MyCtrl">{{message}}</div></div>`;
+                        grid.appendChild(slot);
+                        angular.module('myApp', []).controller('MyCtrl', function($scope) {
+                            $scope.message = '🔺 Angular 1.x';
+                        });
+                        angular.bootstrap(document.getElementById('angular-root'), ['myApp']);
+                        break;
+                        
+                    case 'Backbone':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="backbone-root"></div>`;
+                        grid.appendChild(slot);
+                        const BBView = Backbone.View.extend({
+                            render() { this.$el.html('🦴 Backbone View'); return this; }
+                        });
+                        new BBView({ el: '#backbone-root' }).render();
+                        break;
+                        
+                    // 3D GRAPHICS
+                    case 'Three.js':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><canvas id="three-canvas"></canvas>`;
+                        grid.appendChild(slot);
+                        const scene = new THREE.Scene();
+                        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+                        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+                        renderer.setSize(300, 200);
+                        const geo = new THREE.IcosahedronGeometry(1, 0);
+                        const mat = new THREE.MeshNormalMaterial();
+                        const mesh = new THREE.Mesh(geo, mat);
+                        scene.add(mesh);
+                        camera.position.z = 3;
+                        const animate = () => {
+                            requestAnimationFrame(animate);
+                            mesh.rotation.x += 0.01;
+                            mesh.rotation.y += 0.02;
+                            renderer.render(scene, camera);
+                        };
+                        animate();
+                        break;
+                        
+                    case 'Babylon.js':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><canvas id="babylon-canvas" width="300" height="200"></canvas>`;
+                        grid.appendChild(slot);
+                        const engine = new BABYLON.Engine(document.getElementById('babylon-canvas'), true);
+                        const bScene = new BABYLON.Scene(engine);
+                        const cam = new BABYLON.ArcRotateCamera("cam", Math.PI/2, Math.PI/2.5, 5, BABYLON.Vector3.Zero(), bScene);
+                        const light2 = new BABYLON.HemisphericLight("light2", new BABYLON.Vector3(1, 1, 0), bScene);
+                        const sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", {diameter: 2}, bScene);
+                        engine.runRenderLoop(() => bScene.render());
+                        break;
+                        
+                    case 'PixiJS':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="pixi-container"></div>`;
+                        grid.appendChild(slot);
+                        const app = new PIXI.Application({ width: 300, height: 200, backgroundColor: 0x1099bb });
+                        document.getElementById('pixi-container').appendChild(app.view);
+                        const graphics = new PIXI.Graphics();
+                        graphics.beginFill(0x00ff00);
+                        graphics.drawCircle(150, 100, 50);
+                        graphics.endFill();
+                        app.stage.addChild(graphics);
+                        break;
+                        
+                    case 'p5.js':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="p5-container"></div>`;
+                        grid.appendChild(slot);
+                        new p5((p) => {
+                            p.setup = () => {
+                                p.createCanvas(300, 200).parent('p5-container');
+                            };
+                            p.draw = () => {
+                                p.background(0);
+                                p.fill(0, 255, 0);
+                                p.ellipse(p.sin(p.frameCount * 0.05) * 100 + 150, 100, 50);
+                            };
+                        });
+                        break;
+                        
+                    // CHARTS
+                    case 'D3.js':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><svg id="d3-svg" width="300" height="200"></svg>`;
+                        grid.appendChild(slot);
+                        const svg = d3.select('#d3-svg');
+                        svg.selectAll('circle').data([50, 100, 150, 200]).enter()
+                            .append('circle').attr('cx', d => d).attr('cy', 100).attr('r', 20)
+                            .attr('fill', '#00ff00').attr('opacity', 0.5);
+                        break;
+                        
+                    case 'ECharts':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="echarts-container" style="width:300px;height:200px;"></div>`;
+                        grid.appendChild(slot);
+                        const echart = echarts.init(document.getElementById('echarts-container'));
+                        echart.setOption({
+                            title: { text: 'ECharts', textStyle: { color: '#0f0' } },
+                            series: [{ type: 'pie', data: [{value: 335, name: 'A'}, {value: 310, name: 'B'}] }]
+                        });
+                        break;
+                        
+                    case 'Plotly':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="plotly-container" style="width:300px;height:200px;"></div>`;
+                        grid.appendChild(slot);
+                        Plotly.newPlot('plotly-container', [{
+                            x: [1,2,3,4], y: [10,11,12,13], type: 'scatter', mode: 'lines+markers'
+                        }], {paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)'});
+                        break;
+                        
+                    // ANIMATION
+                    case 'GSAP':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="gsap-target">GSAP Target</div>`;
+                        grid.appendChild(slot);
+                        gsap.to('#gsap-target', { rotation: 360, duration: 2, repeat: -1 });
+                        break;
+                        
+                    case 'Anime.js':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="anime-target" style="width:50px;height:50px;background:#0f0;"></div>`;
+                        grid.appendChild(slot);
+                        anime({ targets: '#anime-target', translateX: 250, duration: 2000, loop: true, direction: 'alternate' });
+                        break;
+                        
+                    case 'Lottie':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="lottie-container" style="width:300px;height:200px;"></div>`;
+                        grid.appendChild(slot);
+                        try {
+                            lottie.loadAnimation({
+                                container: document.getElementById('lottie-container'),
+                                path: 'https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json',
+                                renderer: 'svg',
+                                loop: true,
+                                autoplay: true
+                            });
+                        } catch(e) {
+                            document.getElementById('lottie-container').innerHTML = 'Lottie fallback: Animation loaded';
+                        }
+                        break;
+                        
+                    // MAPS
+                    case 'Leaflet':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="leaflet-map" style="width:300px;height:200px;"></div>`;
+                        grid.appendChild(slot);
+                        const map = L.map('leaflet-map').setView([51.505, -0.09], 13);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                        L.marker([51.505, -0.09]).addTo(map);
+                        break;
+                        
+                    // AUDIO
+                    case 'Tone.js':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="tonejs-container">Tone.js Ready (muted)</div>`;
+                        grid.appendChild(slot);
+                        const synth = new Tone.Synth().toDestination();
+                        // Tone.start(); // Uncomment to enable audio
+                        break;
+                        
+                    // MACHINE LEARNING
+                    case 'TensorFlow.js':
+                        slot.innerHTML = `<div class="success-badge">ACTIVE</div><div id="tensorflow-container">TensorFlow v${tf.version.tfjs}</div>`;
+                        grid.appendChild(slot);
+                        break;
+                        
+                    // DEFAULT CASE FOR OTHERS
+                    default:
+                        slot.innerHTML = `<div class="success-badge">LOADED</div><h3>${name}</h3><p>Library loaded successfully</p>`;
+                        grid.appendChild(slot);
                 }
+            } catch (error) {
+                // If initialization fails, show error but don't crash
+                slot.innerHTML = `
+                    <div class="failure-badge">INIT FAILED</div>
+                    <div class="error-placeholder">
+                        <h3>${name}</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+                grid.appendChild(slot);
             }
         }
-        
-        // INITIALIZE EVERYTHING WHEN DOM READY
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                initializeAllLibraries();
-            }, 3000); // Wait for all scripts
-        });
-        
-        function initializeAllLibraries() {
-            // REACT
-            const root = ReactDOM.createRoot(document.getElementById('react-root'));
-            root.render(React.createElement('div', null, '✅ React 18 MOUNTED'));
-            
-            // VUE
-            Vue.createApp({ template: '<div>✅ Vue 3 MOUNTED</div>' }).mount('#vue-root');
-            
-            // ANGULAR (simplified)
-            angular.module('myApp', []).controller('MyCtrl', function($scope) {
-                $scope.message = '✅ Angular 1 MOUNTED';
+
+        // CHAOS EFFECTS (independent of any library)
+        setInterval(() => {
+            document.querySelectorAll('.library-slot').forEach((el, i) => {
+                el.style.transform = `rotate(${Math.sin(Date.now() * 0.001 + i) * 2}deg)`;
+                el.style.filter = `hue-rotate(${Date.now() * 0.1 % 360}deg)`;
             });
-            angular.bootstrap(document.getElementById('angular-root'), ['myApp']);
-            
-            // SVELTE (component simulation)
-            document.getElementById('svelte-root').innerHTML = '<div>✅ Svelte COMPONENT ACTIVE</div>';
-            
-            // EMBER
-            document.getElementById('ember-root').innerHTML = '<div>✅ Ember LOADED</div>';
-            
-            // BACKBONE
-            const BBView = Backbone.View.extend({
-                render() { this.$el.html('✅ Backbone VIEW RENDERED'); return this; }
-            });
-            new BBView({ el: '#backbone-root' }).render();
-            
-            // THREE.JS 3D SCENE
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, 2, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(400, 300);
-            document.getElementById('threejs-container').appendChild(renderer.domElement);
-            const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-            const material = new THREE.MeshNormalMaterial();
-            const torusKnot = new THREE.Mesh(geometry, material);
-            scene.add(torusKnot);
-            camera.position.z = 30;
-            function animate3D() {
-                requestAnimationFrame(animate3D);
-                torusKnot.rotation.x += 0.01;
-                torusKnot.rotation.y += 0.02;
-                renderer.render(scene, camera);
-            }
-            animate3D();
-            
-            // BABYLON.JS
-            const babylonEngine = new BABYLON.Engine(document.getElementById('babylon-canvas'), true);
-            const babylonScene = new BABYLON.Scene(babylonEngine);
-            const cameraB = new BABYLON.ArcRotateCamera("camera", Math.PI / 2, Math.PI / 2.5, 5, BABYLON.Vector3.Zero(), babylonScene);
-            cameraB.attachControl(document.getElementById('babylon-canvas'), true);
-            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), babylonScene);
-            const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2}, babylonScene);
-            babylonEngine.runRenderLoop(() => babylonScene.render());
-            
-            // PHASER GAME
-            const config = {
-                type: Phaser.AUTO,
-                width: 400,
-                height: 300,
-                parent: 'phaser-game',
-                scene: {
-                    create() {
-                        this.add.text(100, 100, '✅ PHASER GAME', { fill: '#0f0', fontSize: '20px' });
-                    }
-                }
-            };
-            new Phaser.Game(config);
-            
-            // D3.JS
-            const d3svg = d3.select('#d3-svg').attr('width', 400).attr('height', 300);
-            d3svg.selectAll('circle').data([50, 100, 150, 200]).enter()
-                .append('circle').attr('cx', d => d).attr('cy', 150).attr('r', 20)
-                .attr('fill', '#00ff00').attr('opacity', 0.5);
-            
-            // ECHARTS
-            const echart = echarts.init(document.getElementById('echarts-container'));
-            echart.setOption({
-                title: { text: 'ECharts', textStyle: { color: '#0f0' } },
-                series: [{ type: 'pie', data: [{value: 335, name: 'A'}, {value: 310, name: 'B'}] }]
-            });
-            
-            // PLOTLY
-            Plotly.newPlot('plotly-container', [{
-                x: [1, 2, 3, 4], y: [10, 11, 12, 13], type: 'scatter', mode: 'lines+markers'
-            }], {title: 'Plotly.js', paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)'});
-            
-            // CHART.JS
-            new Chart(document.getElementById('chartjs-canvas'), {
-                type: 'bar',
-                data: { labels: ['A', 'B', 'C'], datasets: [{ label: 'Data', data: [1, 2, 3] }] }
-            });
-            
-            // APEXCHARTS
-            new ApexCharts(document.querySelector('#apexcharts'), {
-                chart: { type: 'line' }, series: [{ name: 'sales', data: [30, 40, 35] }]
-            }).render();
-            
-            // C3.JS
-            c3.generate({ bindto: '#c3-chart', data: { columns: [['data', 30, 200, 100, 400, 150, 250]], type: 'bar' } });
-            
-            // LEAFLET MAP
-            const map = L.map('leaflet-map').setView([51.505, -0.09], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker([51.505, -0.09]).addTo(map).bindPopup('✅ Leaflet Map');
-            
-            // MAPBOX
-            mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJjbGJk...'; // Demo token
-            const mapbox = new mapboxgl.Map({ container: 'mapbox-container', style: 'mapbox://styles/mapbox/streets-v11', center: [-74.5, 40], zoom: 9 });
-            
-            // CESIUM 3D GLOBE
-            Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Demo token
-            const cesiumViewer = new Cesium.Viewer('cesium-container', { terrain: Cesium.Terrain.fromWorldTerrain() });
-            
-            // GSAP ANIMATIONS
-            gsap.to('.library-container', { rotation: 1, duration: 2, repeat: -1, yoyo: true });
-            
-            // ANIME.JS
-            anime({ targets: '#anime-target', translateX: 250, duration: 2000, loop: true, direction: 'alternate' });
-            
-            // LOTTIE
-            lottie.loadAnimation({ container: document.getElementById('lottie-container'), path: 'https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json', renderer: 'svg', loop: true, autoplay: true });
-            
-            // VIVUS SVG
-            new Vivus('vivus-svg', { duration: 200, type: 'oneByOne' });
-            
-            // P5.JS SKETCH
-            new p5((p) => {
-                p.setup = () => p.createCanvas(400, 300).parent('p5-container');
-                p.draw = () => {
-                    p.background(0, 50);
-                    p.fill(0, 255, 0);
-                    p.ellipse(p.sin(p.frameCount * 0.05) * 100 + 200, 150, 50);
-                };
-            });
-            
-            // MATTER.JS PHYSICS
-            const engine = Matter.Engine.create();
-            const render = Matter.Render.create({ element: document.getElementById('matter-container'), engine: engine, options: { width: 400, height: 300 } });
-            const box = Matter.Bodies.rectangle(200, 100, 50, 50);
-            const ground = Matter.Bodies.rectangle(200, 290, 400, 20, { isStatic: true });
-            Matter.World.add(engine.world, [box, ground]);
-            Matter.Engine.run(engine);
-            Matter.Render.run(render);
-            
-            // TONE.JS AUDIO
-            const synth = new Tone.Synth().toDestination();
-            Tone.Transport.scheduleRepeat(() => synth.triggerAttackRelease('C4', '8n'), '4n');
-            // Tone.Transport.start(); // Uncomment to hear sound
-            
-            // BOOTSTRAP MODAL (auto-show)
-            const modalHtml = `<div class="modal fade show" style="display: block;"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">✅ Bootstrap 5</h5></div><div class="modal-body">Modal auto-loaded!</div></div></div></div>`;
-            document.getElementById('bootstrap-modal').innerHTML = modalHtml;
-            
-            // PIXI.JS
-            const app = new PIXI.Application({ width: 400, height: 300, backgroundColor: 0x1099bb });
-            document.getElementById('pixi-container').appendChild(app.view);
-            const graphics = new PIXI.Graphics();
-            graphics.beginFill(0x00ff00);
-            graphics.drawCircle(200, 150, 50);
-            graphics.endFill();
-            app.stage.addChild(graphics);
-            
-            // PARTICLES.JS
-            particlesJS('particles-canvas', { particles: { number: { value: 100 }, color: { value: '#00ff00' }, size: { value: 3 }, move: { enable: true, speed: 5 } } });
-            
-            // TENSORFLOW.JS
-            const model = tf.sequential({ layers: [tf.layers.dense({ units: 1, inputShape: [1] })] });
-            document.getElementById('tensorflow-container').innerHTML = '<div>✅ TensorFlow.js Model Loaded</div>';
-            
-            // ML5.JS
-            ml5.imageClassifier('MobileNet').then(() => {
-                document.getElementById('ml5-container').innerHTML = '<div>✅ ML5 MobileNet Loaded</div>';
-            });
-            
-            // SOCKET.IO
-            const socket = io('https://demo.socket.io');
-            socket.on('connect', () => {
-                console.log('✅ Socket.IO Connected');
-            });
-            
-            // FINISHING TOUCHES
-            document.getElementById('loaded-frameworks').textContent = `Loaded: ${window.libraryLoadCount}/${totalLibs} libraries`;
-            document.getElementById('active-animations').textContent = 'Active Animations: 50+';
-            document.getElementById('webgl-contexts').textContent = 'WebGL Contexts: 5';
-            
-            // FINAL CHAOS - RANDOMLY MOVE CONTAINERS
-            setInterval(() => {
-                document.querySelectorAll('.library-container').forEach(el => {
-                    el.style.transform = `translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px)`;
-                });
-            }, 2000);
-        }
+        }, 50);
+
+        // FINAL CHAOS AFTER 5 SECONDS
+        setTimeout(() => {
+            document.body.style.animation = 'spin 10s linear infinite';
+            document.body.style.filter = 'invert(1)';
+        }, 5000);
     </script>
 </body>
 </html>
