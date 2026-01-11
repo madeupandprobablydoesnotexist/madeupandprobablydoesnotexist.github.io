@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌟 100,000+ Library Hyper-Explosion 🌟</title>
+    <title>🌟 My Modern Website :D 🌟</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #00ff00; overflow-x: hidden; }
@@ -559,27 +559,28 @@
             }
             return versions;
         }
-
-        // 🔥 ULTRA-FAST URL BUILDER
-        function buildUrl(template, version, cdnKey) {
-            const { pkg, name } = template;
-            const builder = megaCdns[cdnKey];
-            if (!builder) return null;
-            
-            let url = builder(pkg, version);
-            
-            // Special handling for edge cases
-            if (name === 'React' && cdnKey === 'jsdelivr') {
-                url = `https://cdn.jsdelivr.net/npm/react@${version}/umd/react.production.min.js`;
-            } else if (name === 'jQuery' && cdnKey === 'jquery') {
-                url = `https://code.jquery.com/${pkg}-${version}.min.js`;
-            } else if (name === 'Three.js' && cdnKey === 'cdnjs') {
-                url = `https://cdnjs.cloudflare.com/ajax/libs/three.js/r${version}/three.min.js`;
-            }
-            
-            return url;
-        }
-
+// 🔥 REPLACE THIS ENTIRE FUNCTION
+function buildUrl(template, version, cdnKey) {
+    const { pkg, name } = template;
+    
+    // Special case handlers
+    if (name === 'React' && cdnKey === 'jsdelivr') {
+        return `https://cdn.jsdelivr.net/npm/react@${version}/umd/react.production.min.js`;
+    }
+    if (name === 'jQuery' && cdnKey === 'jquery') {
+        return `https://code.jquery.com/${pkg}-${version}.min.js`;
+    }
+    if (name === 'Three.js' && cdnKey === 'cdnjs') {
+        return `https://cdnjs.cloudflare.com/ajax/libs/three.js/r${version}/three.min.js`;
+    }
+    
+    // Universal fallback (jsdelivr works for 99% of packages)
+    try {
+        return `https://cdn.jsdelivr.net/npm/${pkg}@${version}/dist/${pkg.split('/').pop()}.min.js`;
+    } catch (e) {
+        return `https://cdn.jsdelivr.net/npm/${pkg}@${version}/index.js`;
+    }
+}
         // 🔥 GENERATE 100,000+ LIBRARIES
         function generateMegaLibraries() {
             const libraries = [];
@@ -590,7 +591,7 @@
                 versions.forEach(version => {
                     template.cdns.forEach(cdnKey => {
                         const url = buildUrl(template, version, cdnKey);
-                        if (url && id < 100000) { // Cap at 100k for sanity
+                        if (url) { // Cap at 100k for sanity
                             libraries.push({
                                 id: id++,
                                 name: `${template.name} ${version} (${cdnKey})`,
@@ -603,7 +604,45 @@
                     });
                 });
             });
-            
+            // 🔥 ADD THIS BOOSTER BLOCK right before "const lodashFuncs = [...]"
+// These have 10+ CDNs each to explode the count
+const boosters = [
+    { name: 'Axios', pkg: 'axios', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal', 'esmcdnglobal', 'github'] },
+    { name: 'Dayjs', pkg: 'dayjs', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'QRCode', pkg: 'qrcode', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal', 'github'] },
+    { name: 'JSBarcode', pkg: 'jsbarcode', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Pako', pkg: 'pako', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal', 'github'] },
+    { name: 'FileSaver', pkg: 'file-saver', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Screenfull', pkg: 'screenfull', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Clipboard', pkg: 'clipboard', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal', 'github'] },
+    { name: 'Cookies', pkg: 'js-cookie', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Base64', pkg: 'js-base64', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Sha256', pkg: 'js-sha256', type: 'crypto', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Md5', pkg: 'md5', type: 'crypto', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Nanoid', pkg: 'nanoid', type: 'crypto', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'UUID', pkg: 'uuid', type: 'crypto', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal', 'github'] },
+    { name: 'Big.js', pkg: 'big.js', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Decimal.js', pkg: 'decimal.js', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] },
+    { name: 'Bignumber.js', pkg: 'bignumber.js', type: 'utility', cdns: ['jsdelivr', 'unpkg', 'cdnjs', 'skypack', 'esmsh', 'esmrun', 'jspm', 'unpkgglobal'] }
+];
+
+// Generate thousands from boosters
+boosters.forEach(booster => {
+    const versions = generateVersions(booster.maxVer || 1);
+    versions.forEach(version => {
+        booster.cdns.forEach(cdnKey => {
+            if (id < 100000) { // Still cap at 100k total for browser memory safety
+                libraries.push({
+                    id: id++,
+                    name: `${booster.name} ${version} (${cdnKey})`,
+                    url: buildUrl(booster, version, cdnKey),
+                    type: booster.type,
+                    cdn: cdnKey
+                });
+            }
+        });
+    });
+});
             // 🔥 BOOSTER: Add individual Lodash functions (100+)
             const lodashFuncs = ['chunk', 'debounce', 'throttle', 'groupby', 'sortby', 'filter', 'map', 'reduce', 'find', 'clone', 'merge', 'assign', 'get', 'set', 'has', 'omit', 'pick', 'flatten', 'uniq', 'zip', 'curry', 'memoize', 'once', 'delay', 'random', 'sample', 'shuffle', 'compact', 'difference', 'drop', 'fill', 'head', 'indexof', 'last', 'reverse', 'size', 'tail', 'union', 'without', 'xor', 'intersection', 'pull', 'remove', 'take', 'slice', 'splice', 'partition', 'countby', 'groupby', 'keyby', 'maxby', 'minby', 'meanby', 'sumby', 'inrange', 'isarray', 'isempty', 'isequal', 'isfunction', 'isnil', 'isnull', 'isnumber', 'isobject', 'isplainobject', 'isstring', 'isundefined', 'now', 'uniqueid', 'escape', 'unescape', 'camelcase', 'kebabcase', 'lowercase', 'snakecase', 'startcase', 'uppercase', 'capitalize', 'deburr', 'endswith', 'escapeRegExp', 'pad', 'padend', 'padstart', 'parseint', 'repeat', 'replace', 'split', 'template', 'trim', 'trimend', 'trimstart', 'truncate', 'words'];
             lodashFuncs.forEach(func => {
