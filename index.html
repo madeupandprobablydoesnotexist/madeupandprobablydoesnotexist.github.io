@@ -631,7 +631,7 @@ boosters.forEach(booster => {
     const versions = generateVersions(booster.maxVer || 1);
     versions.forEach(version => {
         booster.cdns.forEach(cdnKey => {
-            if (id < 100000) { // Still cap at 100k total for browser memory safety
+            if (id < 1000000) { // Still cap at 100k total for browser memory safety
                 libraries.push({
                     id: id++,
                     name: `${booster.name} ${version} (${cdnKey})`,
@@ -646,7 +646,7 @@ boosters.forEach(booster => {
             // 🔥 BOOSTER: Add individual Lodash functions (100+)
             const lodashFuncs = ['chunk', 'debounce', 'throttle', 'groupby', 'sortby', 'filter', 'map', 'reduce', 'find', 'clone', 'merge', 'assign', 'get', 'set', 'has', 'omit', 'pick', 'flatten', 'uniq', 'zip', 'curry', 'memoize', 'once', 'delay', 'random', 'sample', 'shuffle', 'compact', 'difference', 'drop', 'fill', 'head', 'indexof', 'last', 'reverse', 'size', 'tail', 'union', 'without', 'xor', 'intersection', 'pull', 'remove', 'take', 'slice', 'splice', 'partition', 'countby', 'groupby', 'keyby', 'maxby', 'minby', 'meanby', 'sumby', 'inrange', 'isarray', 'isempty', 'isequal', 'isfunction', 'isnil', 'isnull', 'isnumber', 'isobject', 'isplainobject', 'isstring', 'isundefined', 'now', 'uniqueid', 'escape', 'unescape', 'camelcase', 'kebabcase', 'lowercase', 'snakecase', 'startcase', 'uppercase', 'capitalize', 'deburr', 'endswith', 'escapeRegExp', 'pad', 'padend', 'padstart', 'parseint', 'repeat', 'replace', 'split', 'template', 'trim', 'trimend', 'trimstart', 'truncate', 'words'];
             lodashFuncs.forEach(func => {
-                if (id < 100000) {
+                if (id < 1000000) {
                     libraries.push({
                         id: id++,
                         name: `Lodash ${func}`,
@@ -661,7 +661,7 @@ boosters.forEach(booster => {
             // 🔥 BOOSTER: Add Moment locales (100+)
             const momentLocales = ['af', 'ar', 'ar-dz', 'ar-kw', 'ar-ly', 'ar-ma', 'ar-sa', 'ar-tn', 'az', 'be', 'bg', 'bm', 'bn', 'bn-bd', 'bo', 'br', 'bs', 'ca', 'cs', 'cv', 'cy', 'da', 'de', 'de-at', 'de-ch', 'dv', 'el', 'en-au', 'en-ca', 'en-gb', 'en-ie', 'en-il', 'en-in', 'en-nz', 'en-sg', 'eo', 'es', 'es-do', 'es-mx', 'es-us', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'fr-ca', 'fr-ch', 'fy', 'ga', 'gd', 'gl', 'gom-deva', 'gom-latn', 'gu', 'he', 'hi', 'hr', 'ht', 'hu', 'hy-am', 'id', 'is', 'it', 'it-ch', 'ja', 'jv', 'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'ky', 'lb', 'lo', 'lt', 'lv', 'me', 'mi', 'mk', 'ml', 'mn', 'mr', 'ms', 'ms-my', 'mt', 'my', 'nb', 'ne', 'nl', 'nl-be', 'nn', 'oc-lnc', 'pa-in', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sd', 'se', 'si', 'sk', 'sl', 'sq', 'sr', 'sr-cyrl', 'ss', 'sv', 'sw', 'ta', 'te', 'tet', 'tg', 'th', 'tk', 'tl-ph', 'tlh', 'tr', 'tzl', 'tzm', 'tzm-latn', 'ug-cn', 'uk', 'ur', 'uz', 'uz-latn', 'vi', 'x-pseudo', 'yo', 'zh-cn', 'zh-hk', 'zh-mo', 'zh-tw'];
             momentLocales.forEach(locale => {
-                if (id < 100000) {
+                if (id < 1000000) {
                     libraries.push({
                         id: id++,
                         name: `Moment ${locale}`,
@@ -676,7 +676,7 @@ boosters.forEach(booster => {
             // 🔥 BOOSTER: Add TensorFlow models (50+)
             const tfModels = ['mobilenet', 'coco-ssd', 'posenet', 'knn-classifier', 'speech-commands', 'qna', 'body-pix', 'handpose', 'facemesh', 'universal-sentence-encoder', 'toxicity', 'deeplab', 'image-classification', 'object-detection', 'face-landmarks-detection', 'text-toxicity', 'sentiment', 'qna', 'speech-recognition', 'tflite', 'auto-ml', 'image-segmentation', 'pose-detection', 'hand-detection', 'face-detection', 'object-detection', 'image-classification', 'text-embedding', 'sentence-encoder', 'universal-sentence-encoder', 'text-toxicity', 'toxicity', 'qna', 'speech-commands', 'audio-recognition', 'text-similarity', 'sentence-similarity', 'semantic-similarity', 'text-embedding', 'feature-extraction', 'image-super-resolution', 'super-resolution', 'style-transfer', 'image-style-transfer', 'image-to-image', 'image-translation', 'face-recognition', 'face-verification', 'face-identification', 'emotion-detection', 'sentiment-analysis', 'text-sentiment', 'text-emotion', 'question-answering', 'reading-comprehension', 'text-summarization', 'summarization', 'translation', 'text-translation', 'language-translation', 'language-detection', 'text-language', 'text-generation', 'text-completion', 'autocomplete', 'text-autocomplete', 'sentence-completion', 'paragraph-completion', 'story-generation', 'poem-generation', 'code-generation', 'text-to-code', 'code-completion', 'code-summarization', 'code-translation', 'code-search', 'code-embedding', 'code-similarity'];
             tfModels.forEach(model => {
-                if (id < 100000) {
+                if (id < 1000000) {
                     libraries.push({
                         id: id++,
                         name: `TF ${model}`,
@@ -691,7 +691,7 @@ boosters.forEach(booster => {
             // 🔥 BOOSTER: Add D3 plugins (50+)
             const d3Plugins = ['d3-annotation', 'd3-blackbox', 'd3-breadcrumb', 'd3-calendar', 'd3-cartogram', 'd3-chord-diagram', 'd3-cloud', 'd3-collection', 'd3-color-legend', 'd3-contour', 'd3-dag', 'd3-drag', 'd3-dsv', 'd3-ease', 'd3-geo-projection', 'd3-geo-voronoi', 'd3-graphviz', 'd3-hexbin', 'd3-hierarchy', 'd3-horizon-chart', 'd3-interpolate', 'd3-marcon', 'd3-parsets', 'd3-path', 'd3-pedigree', 'd3-sankey', 'd3-selection', 'd3-selection-multi', 'd3-simple-slider', 'd3-superformula', 'd3-svg-annotation', 'd3-svg-legend', 'd3-tile', 'd3-time', 'd3-tip', 'd3-transition', 'd3-voronoi', 'd3-zoom'];
             d3Plugins.forEach(plugin => {
-                if (id < 100000) {
+                if (id < 1000000) {
                     libraries.push({
                         id: id++,
                         name: `D3 ${plugin}`,
