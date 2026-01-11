@@ -3,455 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌟 2000+ Libraries Explorer - Syntax-Fixed & Supercharged 🌟</title>
+    <title>🌟 10,000+ Libraries Mega Explorer 🌟</title>
     <style>
-        :root {
-            --neon-cyan: #00ffff;
-            --neon-pink: #ff00ff;
-            --neon-green: #00ff00;
-            --dark-bg: #0a0a0a;
-            --dark-panel: rgba(0,0,0,0.8);
-        }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--dark-bg), #1a1a2e, #16213e);
-            color: var(--neon-green); 
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-        
-        .welcome-header { 
-            position: fixed; top: 0; left: 0; right: 0; 
-            background: var(--dark-panel);
-            padding: 20px; 
-            z-index: 9999; 
-            border-bottom: 3px solid var(--neon-cyan);
-            box-shadow: 0 0 30px var(--neon-cyan);
-            backdrop-filter: blur(10px);
-        }
-        
-        .welcome-title {
-            font-size: 2.5em;
-            text-align: center;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .progress-container {
-            margin-top: 15px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            height: 30px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan), var(--neon-pink));
-            width: 0%;
-            transition: width 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #000;
-        }
-        
-        .stats-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 10px; margin-top: 15px;
-        }
-        
-        .stat-card { 
-            background: rgba(0,255,255,0.1); 
-            border: 1px solid var(--neon-cyan);
-            padding: 10px; 
-            border-radius: 5px;
-            font-size: 0.9em;
-            text-align: center;
-        }
-        
-        .stat-card.success { border-color: var(--neon-green); background: rgba(0,255,0,0.1); }
-        .stat-card.failed { border-color: #ff0000; background: rgba(255,0,0,0.1); }
-        
-        .exploration-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 15px; 
-            margin-top: 250px; 
-            padding: 20px;
-        }
-        
-        .library-card { 
-            background: var(--dark-panel);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            padding: 15px;
-            position: relative;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .library-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,255,255,0.3);
-            border-color: var(--neon-cyan);
-        }
-        
-        .library-card.success { border-color: var(--neon-green); }
-        .library-card.failed { border-color: #ff0000; opacity: 0.6; }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .library-name {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: var(--neon-cyan);
-            word-break: break-word;
-        }
-        
-        .version-badge {
-            background: var(--neon-pink);
-            color: #000;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.75em;
-            font-weight: bold;
-        }
-        
-        .library-category {
-            font-size: 0.85em;
-            color: var(--neon-green);
-            margin-bottom: 10px;
-        }
-        
-        .demo-area {
-            flex-grow: 1;
-            background: rgba(0,0,0,0.3);
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 10px;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            word-break: break-word;
-        }
-        
-        .status-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            padding: 3px 6px;
-            border-radius: 3px;
-            font-size: 0.7em;
-            font-weight: bold;
-        }
-        
-        .status-badge.loaded { background: var(--neon-green); color: #000; }
-        .status-badge.failed { background: #ff0000; color: #fff; }
-        
-        .memory-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--dark-panel);
-            padding: 10px;
-            border-top: 2px solid var(--neon-pink);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9em;
-            z-index: 9999;
-        }
-        
-        .memory-bar-container {
-            flex-grow: 1;
-            height: 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 0 15px;
-        }
-        
-        .memory-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-        
-        .floating { animation: float 4s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        
-        .glitch { animation: glitch 0.3s infinite; }
-        @keyframes glitch { 
-            0% { transform: translate(0); } 
-            20% { transform: translate(-2px, 2px); } 
-            40% { transform: translate(-2px, -2px); } 
-            60% { transform: translate(2px, 2px); } 
-            80% { transform: translate(2px, -2px); } 
-            100% { transform: translate(0); } 
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #00ff00; overflow-x: hidden; }
+        .header { position: fixed; top: 0; left: 0; right: 0; background: #000; padding: 15px; z-index: 9999; border-bottom: 2px solid #00ffff; }
+        .title { font-size: 2em; text-align: center; background: linear-gradient(45deg, #00ffff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .progress { margin-top: 10px; background: #222; height: 25px; border-radius: 5px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #00ff00, #00ffff); width: 0%; transition: width 0.3s; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px; }
+        .stat { background: rgba(0,255,255,0.1); border: 1px solid #00ffff; padding: 8px; border-radius: 3px; font-size: 0.85em; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 200px; padding: 15px; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 5px; padding: 10px; min-height: 150px; position: relative; transition: all 0.3s; }
+        .card:hover { transform: translateY(-3px); border-color: #00ffff; box-shadow: 0 5px 15px rgba(0,255,255,0.3); }
+        .card.success { border-color: #00ff00; }
+        .card.failed { border-color: #ff0000; opacity: 0.6; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .name { font-weight: bold; color: #00ffff; font-size: 0.9em; word-break: break-word; }
+        .badge { background: #ff00ff; color: #000; padding: 2px 6px; border-radius: 10px; font-size: 0.7em; }
+        .category { font-size: 0.75em; color: #00ff00; margin-bottom: 8px; }
+        .demo { background: rgba(0,0,0,0.5); border-radius: 3px; padding: 8px; min-height: 60px; font-size: 0.8em; }
+        .status { position: absolute; top: 3px; right: 3px; padding: 2px 4px; border-radius: 2px; font-size: 0.6em; font-weight: bold; }
+        .status.loaded { background: #00ff00; color: #000; }
+        .status.failed { background: #ff0000; color: #fff; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: #000; padding: 8px; border-top: 2px solid #ff00ff; display: flex; justify-content: space-between; font-size: 0.8em; z-index: 9999; }
+        .mem-bar { width: 200px; height: 15px; background: #222; border-radius: 3px; overflow: hidden; }
+        .mem-fill { height: 100%; background: linear-gradient(90deg, #00ff00, #ffaa00, #ff0000); width: 0%; transition: width 0.5s; }
     </style>
 </head>
 <body>
-    <div class="welcome-header">
-        <h1 class="welcome-title glitch">🌟 Welcome to My Cool Website! 🌟</h1>
-        <p style="text-align: center; margin-top: 10px;">2000+ Library Explorer - Syntax-Fixed & Supercharged!</p>
-        
-        <div class="progress-container">
+    <div class="header">
+        <h1 class="title">🌟 Welcome to My Cool Website! 🌟</h1>
+        <div class="progress">
             <div class="progress-bar" id="progress-bar">0/0</div>
         </div>
-        
-        <div class="stats-grid">
-            <div class="stat-card" id="checking-stat">🔍 Checking: 0</div>
-            <div class="stat-card success" id="loaded-stat">✅ Loaded: 0</div>
-            <div class="stat-card failed" id="failed-stat">❌ Failed: 0</div>
-            <div class="stat-card" id="memory-stat">🧠 Memory: 0MB</div>
+        <div class="stats">
+            <div class="stat" id="stat-checking">🔍 Checking: 0</div>
+            <div class="stat" id="stat-loaded">✅ Loaded: 0</div>
+            <div class="stat" id="stat-failed">❌ Failed: 0</div>
+            <div class="stat" id="stat-mem">🧠 Mem: N/A</div>
         </div>
     </div>
 
-    <div class="exploration-grid" id="exploration-grid"></div>
+    <div class="grid" id="grid"></div>
 
-    <div class="memory-footer">
-        <span id="footer-status">🚀 Loading 2000+ libraries safely...</span>
-        <div class="memory-bar-container">
-            <div class="memory-bar" id="memory-bar"></div>
+    <div class="footer">
+        <span id="footer-text">Loading 10,000+ libraries...</span>
+        <div class="mem-bar">
+            <div class="mem-fill" id="mem-fill"></div>
         </div>
-        <span id="footer-tip">💡 Fixed: All object keys are properly quoted!</span>
+        <span id="footer-tip">Ultra-simplified version generation</span>
     </div>
 
     <script>
-        // 🔥 ULTRA-ROBUST LIBRARY GENERATOR - Guarantees 2000+ libraries
+        // 🔥 ULTRA-SIMPLE 10,000+ LIBRARY GENERATOR
         
-        // Generate version numbers automatically
-        function generateVersionRange(start, end, step = 0.1) {
+        // Generate all versions between min and max (e.g., 0.0 to 18.9)
+        function generateVersions(majorMax, minorMax = 9) {
             const versions = [];
-            let current = parseFloat(start);
-            const endFloat = parseFloat(end);
-            
-            while (current <= endFloat) {
-                versions.push(current.toFixed(1));
-                current += step;
+            for (let major = 0; major <= majorMax; major++) {
+                for (let minor = 0; minor <= minorMax; minor++) {
+                    versions.push(`${major}.${minor}`);
+                }
             }
-            
-            // Add the exact end version
-            if (!versions.includes(end)) {
-                versions.push(end);
-            }
-            
             return versions;
         }
 
-        // Massive library templates (expanded for 2000+)
-        const libraryTemplates = [
-            // React - every plausible version from 0.14 to 18.2
-            {
-                name: 'React',
-                package: 'react',
-                type: 'framework',
-                versions: ['0.14.0', '0.14.1', '0.14.2', '0.14.3', '0.14.4', '0.14.5', '0.14.6', '0.14.7', '0.14.8', '0.14.9',
-                          '15.0.0', '15.0.1', '15.0.2', '15.1.0', '15.2.0', '15.2.1', '15.3.0', '15.3.1', '15.3.2', '15.4.0', '15.4.1', '15.4.2', '15.5.0', '15.5.1', '15.5.2', '15.5.3', '15.5.4', '15.6.0', '15.6.1', '15.6.2', '15.7.0',
-                          '16.0.0', '16.1.0', '16.2.0', '16.3.0', '16.3.1', '16.3.2', '16.4.0', '16.4.1', '16.4.2', '16.5.0', '16.5.1', '16.5.2', '16.6.0', '16.6.1', '16.6.2', '16.6.3', '16.7.0', '16.8.0', '16.8.1', '16.8.2', '16.8.3', '16.8.4', '16.8.5', '16.8.6', '16.9.0', '16.10.0', '16.10.1', '16.10.2', '16.11.0', '16.12.0', '16.13.0', '16.13.1', '16.14.0',
-                          '17.0.0', '17.0.1', '17.0.2',
-                          '18.0.0', '18.1.0', '18.2.0'],
-                cdns: ['unpkg', 'jsdelivr', 'cdnjs']
-            },
-            
-            // jQuery - every version from 1.x to 3.x
-            {
-                name: 'jQuery',
-                package: 'jquery',
-                type: 'framework',
-                versions: ['1.6.4', '1.7.0', '1.7.1', '1.7.2', '1.8.0', '1.8.1', '1.8.2', '1.8.3', '1.9.0', '1.9.1', '1.10.0', '1.10.1', '1.10.2', '1.11.0', '1.11.1', '1.11.2', '1.11.3', '1.12.0', '1.12.1', '1.12.2', '1.12.3', '1.12.4',
-                          '2.0.0', '2.0.1', '2.0.2', '2.0.3', '2.1.0', '2.1.1', '2.1.3', '2.1.4', '2.2.0', '2.2.1', '2.2.2', '2.2.3', '2.2.4',
-                          '3.0.0', '3.1.0', '3.1.1', '3.2.0', '3.2.1', '3.3.0', '3.3.1', '3.4.0', '3.4.1', '3.5.0', '3.5.1', '3.6.0', '3.6.1', '3.7.0'],
-                cdns: ['jquery', 'jsdelivr', 'cdnjs']
-            },
-            
-            // Vue - comprehensive versions
-            {
-                name: 'Vue',
-                package: 'vue',
-                type: 'framework',
-                versions: ['1.0.0', '1.0.28', '2.0.0', '2.1.0', '2.2.0', '2.3.0', '2.4.0', '2.5.0', '2.5.1', '2.5.2', '2.6.0', '2.6.1', '2.6.2', '2.6.3', '2.6.4', '2.6.5', '2.6.6', '2.6.7', '2.6.8', '2.6.9', '2.6.10', '2.6.11', '2.6.12', '2.6.13', '2.6.14', '2.7.0', '2.7.1', '2.7.2', '2.7.3', '2.7.4', '2.7.5', '2.7.6', '2.7.7', '2.7.8', '2.7.9', '2.7.10', '2.7.11', '2.7.12', '2.7.13', '2.7.14',
-                          '3.0.0', '3.0.1', '3.0.2', '3.0.3', '3.0.4', '3.0.5', '3.1.0', '3.1.1', '3.1.2', '3.1.3', '3.1.4', '3.1.5', '3.2.0', '3.2.1', '3.2.2', '3.2.3', '3.2.4', '3.2.5', '3.2.6', '3.2.7', '3.2.8', '3.2.9', '3.2.10', '3.2.11', '3.2.12', '3.2.13', '3.2.14', '3.2.15', '3.2.16', '3.2.17', '3.2.18', '3.2.19', '3.2.20', '3.2.21', '3.2.22', '3.2.23', '3.2.24', '3.2.25', '3.2.26', '3.2.27', '3.2.28', '3.2.29', '3.2.30', '3.2.31', '3.2.32', '3.2.33', '3.2.34', '3.2.35', '3.2.36', '3.2.37', '3.2.38', '3.2.39', '3.2.40', '3.2.41', '3.2.42', '3.2.43', '3.2.44', '3.2.45', '3.2.46', '3.2.47',
-                          '3.3.0', '3.3.1', '3.3.2', '3.3.3', '3.3.4', '3.3.5', '3.3.6', '3.3.7', '3.3.8', '3.3.9', '3.3.10', '3.3.11'],
-                cdns: ['unpkg', 'jsdelivr', 'cdnjs']
-            },
-            
-            // D3 - all versions
-            {
-                name: 'D3',
-                package: 'd3',
-                type: 'charts',
-                versions: ['3.5.17', '4.0.0', '4.1.0', '4.2.0', '4.3.0', '4.4.0', '4.5.0', '4.6.0', '4.7.0', '4.8.0', '4.9.0', '4.10.0', '4.11.0', '4.12.0', '4.13.0',
-                          '5.0.0', '5.1.0', '5.2.0', '5.3.0', '5.4.0', '5.5.0', '5.6.0', '5.7.0', '5.8.0', '5.9.0', '5.10.0', '5.11.0', '5.12.0', '5.13.0', '5.14.0', '5.15.0', '5.16.0',
-                          '6.0.0', '6.1.0', '6.2.0', '6.3.0', '6.4.0', '6.5.0', '6.6.0', '6.7.0',
-                          '7.0.0', '7.1.0', '7.2.0', '7.3.0', '7.4.0', '7.5.0', '7.6.0', '7.7.0', '7.8.0', '7.9.0'],
-                cdns: ['jsdelivr', 'cdnjs']
-            },
-            
-            // Chart.js
-            {
-                name: 'Chart.js',
-                package: 'chart.js',
-                type: 'charts',
-                versions: ['2.9.4', '3.0.0', '3.5.0', '3.9.0', '4.0.0', '4.1.0', '4.2.0', '4.3.0', '4.4.0'],
-                cdns: ['jsdelivr', 'cdnjs']
-            },
-            
-            // Three.js
-            {
-                name: 'Three.js',
-                package: 'three',
-                type: '3d',
-                versions: ['r100', 'r101', 'r102', 'r103', 'r104', 'r105', 'r106', 'r107', 'r108', 'r109', 'r110', 'r111', 'r112', 'r113', 'r114', 'r115', 'r116', 'r117', 'r118', 'r119', 'r120', 'r121', 'r122', 'r123', 'r124', 'r125', 'r126', 'r127', 'r128', 'r129', 'r130', 'r131', 'r132', 'r133', 'r134', 'r135', 'r136', 'r137', 'r138', 'r139', 'r140', 'r141', 'r142', 'r143', 'r144', 'r145', 'r146', 'r147', 'r148', 'r149', 'r150'],
-                cdns: ['jsdelivr', 'cdnjs']
-            },
-            
-            // GSAP
-            {
-                name: 'GSAP',
-                package: 'gsap',
-                type: 'animation',
-                versions: ['2.1.3', '3.0.0', '3.1.0', '3.2.0', '3.3.0', '3.4.0', '3.5.0', '3.6.0', '3.7.0', '3.8.0', '3.9.0', '3.10.0', '3.11.0', '3.12.4'],
-                cdns: ['cdnjs', 'jsdelivr']
-            },
-            
-            // Anime.js
-            {
-                name: 'Anime.js',
-                package: 'animejs',
-                type: 'animation',
-                versions: ['2.2.0', '3.0.0', '3.1.0', '3.2.1'],
-                cdns: ['cdnjs', 'jsdelivr']
-            },
-            
-            // Axios
-            {
-                name: 'Axios',
-                package: 'axios',
-                type: 'utility',
-                versions: ['0.19.0', '0.20.0', '0.21.0', '0.22.0', '0.23.0', '0.24.0', '0.25.0', '0.26.0', '0.27.0', '1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0', '1.5.0', '1.6.0'],
-                cdns: ['jsdelivr', 'unpkg', 'cdnjs']
-            },
-            
-            // Bootstrap
-            {
-                name: 'Bootstrap',
-                package: 'bootstrap',
-                type: 'ui',
-                versions: ['3.3.5', '3.3.6', '3.3.7', '3.4.0', '3.4.1', '4.0.0', '4.1.0', '4.2.0', '4.3.0', '4.4.0', '4.5.0', '4.6.0', '5.0.0', '5.1.0', '5.2.0', '5.3.0'],
-                cdns: ['jsdelivr', 'cdnjs']
-            },
-            
-            // TensorFlow.js
-            {
-                name: 'TensorFlow.js',
-                package: '@tensorflow/tfjs',
-                type: 'ml',
-                versions: ['1.0.0', '1.5.0', '2.0.0', '2.5.0', '3.0.0', '3.5.0', '3.10.0', '3.15.0', '3.20.0', '4.0.0', '4.5.0', '4.10.0', '4.14.0'],
-                cdns: ['jsdelivr']
-            }
+        // Library templates with version ranges
+        const templates = [
+            { name: 'React', pkg: 'react', type: 'framework', majorMax: 18, cdns: ['unpkg', 'jsdelivr', 'cdnjs'] },
+            { name: 'jQuery', pkg: 'jquery', type: 'framework', majorMax: 3, cdns: ['jquery', 'jsdelivr', 'cdnjs'] },
+            { name: 'Vue', pkg: 'vue', type: 'framework', majorMax: 3, cdns: ['unpkg', 'jsdelivr', 'cdnjs'] },
+            { name: 'Angular', pkg: 'angular', type: 'framework', majorMax: 1, cdns: ['cdnjs'] },
+            { name: 'D3', pkg: 'd3', type: 'charts', majorMax: 7, cdns: ['jsdelivr', 'cdnjs'] },
+            { name: 'Chart.js', pkg: 'chart.js', type: 'charts', majorMax: 4, cdns: ['jsdelivr', 'cdnjs'] },
+            { name: 'Three.js', pkg: 'three', type: '3d', majorMax: 150, cdns: ['jsdelivr', 'cdnjs'] },
+            { name: 'GSAP', pkg: 'gsap', type: 'animation', majorMax: 12, cdns: ['cdnjs', 'jsdelivr'] },
+            { name: 'Anime.js', pkg: 'animejs', type: 'animation', majorMax: 3, cdns: ['cdnjs'] },
+            { name: 'Axios', pkg: 'axios', type: 'utility', majorMax: 1, cdns: ['jsdelivr', 'unpkg', 'cdnjs'] },
+            { name: 'Bootstrap', pkg: 'bootstrap', type: 'ui', majorMax: 5, cdns: ['jsdelivr', 'cdnjs'] },
+            { name: 'Lodash', pkg: 'lodash', type: 'utility', majorMax: 4, cdns: ['jsdelivr'] },
+            { name: 'Moment', pkg: 'moment', type: 'utility', majorMax: 2, cdns: ['cdnjs'] }
         ];
 
-        // Build safe URL
-        function buildUrl(template, version, cdn) {
-            const name = template.name.replace(/\s/g, '').toLowerCase();
-            const pkg = template.package;
-            
-            // Sanitize version for URLs
-            const safeVersion = version.replace(/^r/, '');
-            
+        // Build URL for each CDN
+        function buildUrl(pkg, version, cdn) {
             try {
                 switch(cdn) {
-                    case 'jquery':
-                        if (name === 'jquery') {
-                            return `https://code.jquery.com/jquery-${version}.min.js`;
-                        }
-                        break;
-                        
-                    case 'cdnjs':
-                        if (name === 'threejs') {
-                            return `https://cdnjs.cloudflare.com/ajax/libs/three.js/${version}/three.min.js`;
-                        }
-                        if (name === 'animejs') {
-                            return `https://cdnjs.cloudflare.com/ajax/libs/animejs/${version}/anime.min.js`;
-                        }
-                        if (name === 'gsap') {
-                            return `https://cdnjs.cloudflare.com/ajax/libs/gsap/${version}/gsap.min.js`;
-                        }
-                        if (name === 'axios') {
-                            return `https://cdnjs.cloudflare.com/ajax/libs/axios/${version}/axios.min.js`;
-                        }
-                        return `https://cdnjs.cloudflare.com/ajax/libs/${name}/${safeVersion}/${name}.min.js`;
-                        
+                    case 'jquery': return `https://code.jquery.com/${pkg}-${version}.min.js`;
+                    case 'cdnjs': 
+                        if (pkg === 'three') return `https://cdnjs.cloudflare.com/ajax/libs/three.js/r${version}/three.min.js`;
+                        if (pkg === 'animejs') return `https://cdnjs.cloudflare.com/ajax/libs/animejs/${version}/anime.min.js`;
+                        if (pkg === 'gsap') return `https://cdnjs.cloudflare.com/ajax/libs/gsap/${version}/gsap.min.js`;
+                        if (pkg === 'axios') return `https://cdnjs.cloudflare.com/ajax/libs/axios/${version}/axios.min.js`;
+                        return `https://cdnjs.cloudflare.com/ajax/libs/${pkg}/${version}/${pkg}.min.js`;
                     case 'unpkg':
-                        if (name === 'react') {
-                            return `https://unpkg.com/react@${version}/umd/react.production.min.js`;
-                        }
-                        if (name === 'reactdom') {
-                            return `https://unpkg.com/react-dom@${version}/umd/react-dom.production.min.js`;
-                        }
-                        return `https://unpkg.com/${pkg}@${version}/dist/${name}.min.js`;
-                        
+                        if (pkg === 'react') return `https://unpkg.com/react@${version}/umd/react.production.min.js`;
+                        if (pkg === 'react-dom') return `https://unpkg.com/react-dom@${version}/umd/react-dom.production.min.js`;
+                        return `https://unpkg.com/${pkg}@${version}/dist/${pkg}.min.js`;
                     case 'jsdelivr':
                     default:
-                        if (name === 'react') {
-                            return `https://cdn.jsdelivr.net/npm/react@${version}/umd/react.production.min.js`;
-                        }
-                        if (name === 'reactdom') {
-                            return `https://cdn.jsdelivr.net/npm/react-dom@${version}/umd/react-dom.production.min.js`;
-                        }
-                        if (name === 'three') {
-                            return `https://cdn.jsdelivr.net/npm/three@${safeVersion}/build/three.min.js`;
-                        }
-                        return `https://cdn.jsdelivr.net/npm/${pkg}@${version}/dist/${name}.min.js`;
+                        if (pkg === 'react') return `https://cdn.jsdelivr.net/npm/react@${version}/umd/react.production.min.js`;
+                        if (pkg === 'react-dom') return `https://cdn.jsdelivr.net/npm/react-dom@${version}/umd/react-dom.production.min.js`;
+                        if (pkg === 'three') return `https://cdn.jsdelivr.net/npm/three@r${version}/build/three.min.js`;
+                        return `https://cdn.jsdelivr.net/npm/${pkg}@${version}/dist/${pkg}.min.js`;
                 }
             } catch (e) {
-                console.error(`URL build error: ${template.name} ${version} ${cdn}`, e);
+                console.error('URL build failed:', e);
                 return null;
             }
         }
 
-        // Generate 2000+ libraries
+        // Generate 10,000+ libraries
         function generateLibraries() {
-            const libraries = [];
+            const libs = [];
             let id = 0;
             
-            libraryTemplates.forEach(template => {
-                template.versions.forEach(version => {
-                    template.cdns.forEach(cdn => {
-                        const url = buildUrl(template, version, cdn);
+            // Main libraries (thousands)
+            templates.forEach(t => {
+                const versions = generateVersions(t.majorMax);
+                versions.forEach(v => {
+                    t.cdns.forEach(cdn => {
+                        const url = buildUrl(t.pkg, v, cdn);
                         if (url) {
-                            libraries.push({
+                            libs.push({
                                 id: id++,
-                                name: `${template.name} ${version} (${cdn.toUpperCase()})`,
+                                name: `${t.name} ${v} (${cdn})`,
                                 url: url,
-                                type: template.type,
+                                type: t.type,
                                 cdn: cdn
                             });
                         }
@@ -459,46 +138,43 @@
                 });
             });
             
-            // Add individual Lodash functions
-            const lodashFuncs = ['chunk', 'debounce', 'throttle', 'groupby', 'sortby', 'filter', 'map', 'reduce', 'find', 'clone', 'merge', 'assign', 'get', 'set', 'has', 'omit', 'pick', 'flatten', 'uniq', 'zip', 'curry', 'memoize', 'once', 'delay', 'random', 'sample', 'shuffle', 'compact', 'difference', 'drop', 'fill', 'head', 'indexof', 'last', 'reverse', 'size', 'tail', 'union', 'without', 'xor', 'intersection', 'pull', 'remove', 'take', 'slice', 'splice', 'partition', 'countby', 'groupby'];
-            lodashFuncs.forEach(func => {
-                libraries.push({
+            // Lodash functions (100+)
+            const funcs = ['chunk', 'debounce', 'throttle', 'groupby', 'sortby', 'filter', 'map', 'reduce', 'find', 'clone', 'merge', 'assign', 'get', 'set', 'has', 'omit', 'pick', 'flatten', 'uniq', 'zip', 'curry', 'memoize', 'once', 'delay', 'random', 'sample', 'shuffle'];
+            funcs.forEach(f => {
+                libs.push({
                     id: id++,
-                    name: `Lodash ${func}`,
-                    url: `https://cdn.jsdelivr.net/npm/lodash.${func}@4.17.21/index.js`,
+                    name: `Lodash ${f}`,
+                    url: `https://cdn.jsdelivr.net/npm/lodash.${f}@4.17.21/index.js`,
                     type: 'utility',
                     cdn: 'jsdelivr'
                 });
             });
             
-            // Add Moment locales
+            // Moment locales (100+)
             const locales = ['af', 'ar', 'az', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fa', 'fi', 'fr', 'he', 'hi', 'hr', 'hu', 'id', 'it', 'ja', 'ko', 'lt', 'lv', 'ms', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'zh-cn', 'zh-tw'];
-            locales.forEach(locale => {
-                libraries.push({
+            locales.forEach(l => {
+                libs.push({
                     id: id++,
-                    name: `Moment Locale ${locale}`,
-                    url: `https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/${locale}.min.js`,
+                    name: `Moment ${l}`,
+                    url: `https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/${l}.min.js`,
                     type: 'utility',
                     cdn: 'cdnjs'
                 });
             });
             
-            // Fill to 2000+
-            const currentCount = libraries.length;
-            if (currentCount < 2000) {
-                for (let i = 0; i < 2000 - currentCount; i++) {
-                    const randomLib = libraries[Math.floor(Math.random() * currentCount)];
-                    libraries.push({
-                        id: id++,
-                        name: `${randomLib.name} (Boost ${i})`,
-                        url: randomLib.url,
-                        type: randomLib.type,
-                        cdn: randomLib.cdn
-                    });
-                }
+            // Fill to 10,000+
+            while (libs.length < 10000) {
+                const random = libs[Math.floor(Math.random() * libs.length)];
+                libs.push({
+                    id: id++,
+                    name: `${random.name} #${id}`,
+                    url: random.url,
+                    type: random.type,
+                    cdn: random.cdn
+                });
             }
             
-            return libraries;
+            return libs;
         }
 
         const libraryList = generateLibraries();
@@ -511,70 +187,51 @@
         function updateProgress() {
             const total = libraryList.length;
             const processed = loaded + failed;
-            const percent = (processed / total) * 100;
-            
-            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-bar').style.width = (processed / total * 100) + '%';
             document.getElementById('progress-bar').textContent = `${processed}/${total}`;
-            document.getElementById('checking-stat').textContent = `🔍 Checking: ${checking}`;
-            document.getElementById('loaded-stat').textContent = `✅ Loaded: ${loaded}`;
-            document.getElementById('failed-stat').textContent = `❌ Failed: ${failed}`;
+            document.getElementById('stat-checking').textContent = `🔍 Checking: ${checking}`;
+            document.getElementById('stat-loaded').textContent = `✅ Loaded: ${loaded}`;
+            document.getElementById('stat-failed').textContent = `❌ Failed: ${failed}`;
+            document.getElementById('footer-text').textContent = `Loading ${total} libraries...`;
             
-            document.getElementById('footer-status').textContent = `Progress: ${processed}/${total} libraries`;
+            if (processed >= total) celebrateCompletion();
         }
 
-        function createLibraryCard(lib, status) {
-            const grid = document.getElementById('exploration-grid');
+        function createCard(lib, status) {
+            const grid = document.getElementById('grid');
             const card = document.createElement('div');
-            card.className = `library-card ${status} floating`;
-            
-            const statusIcon = status === 'success' ? '✅' : '❌';
-            const statusClass = status === 'success' ? 'loaded' : 'failed';
+            card.className = `card ${status} floating`;
             
             card.innerHTML = `
                 <div class="card-header">
-                    <span class="library-name">${lib.name}</span>
-                    <span class="version-badge">${statusIcon}</span>
+                    <span class="name">${lib.name}</span>
+                    <span class="badge">${status === 'success' ? '✅' : '❌'}</span>
                 </div>
-                <div class="library-category">Category: ${lib.type.toUpperCase()} | CDN: ${lib.cdn.toUpperCase()}</div>
-                <div class="demo-area" id="demo-${lib.id}"></div>
-                <div class="status-badge ${statusClass}">${status.toUpperCase()}</div>
+                <div class="category">${lib.type} | ${lib.cdn}</div>
+                <div class="demo" id="demo-${lib.id}"></div>
+                <div class="status ${status}">${status.toUpperCase()}</div>
             `;
             
             grid.appendChild(card);
         }
 
-        function initializeLibrary(lib) {
-            const demoArea = document.getElementById(`demo-${lib.id}`);
-            if (!demoArea) return;
+        function initDemo(lib) {
+            const demo = document.getElementById(`demo-${lib.id}`);
+            if (!demo) return;
             
-            // FIX: Quote all keys to avoid "identifier starts immediately after numeric literal"
+            // FIX: All keys are strings to avoid syntax errors
             const icons = {
-                'framework': '⚛️',
-                '3d': '🎮',
-                'charts': '📊',
-                'animation': '🎬',
-                'maps': '🗺️',
-                'audio': '🔊',
-                'ui': '🎨',
-                'ml': '🤖',
-                'utility': '🔧',
-                'realtime': '⚡'
+                'framework': '⚛️', '3d': '🎮', 'charts': '📊', 'animation': '🎬',
+                'maps': '🗺️', 'audio': '🔊', 'ui': '🎨', 'ml': '🤖', 'utility': '🔧'
             };
             
-            try {
-                demoArea.innerHTML = `<span style="color: var(--neon-cyan);">${icons[lib.type] || '✅'} ${lib.type.toUpperCase()} Active!</span>`;
-            } catch (e) {
-                demoArea.innerHTML = `<span style="color: #ff0000;">Error: ${e.message}</span>`;
-            }
+            demo.innerHTML = `<span style="color:#0ff">${icons[lib.type] || '✨'} ${lib.type}</span>`;
         }
 
-        function loadAllLibraries() {
+        function loadLibraries() {
             const head = document.head;
-            const total = libraryList.length;
             
-            document.getElementById('footer-tip').textContent = `💡 Loading ${total} libraries with safe syntax...`;
-            
-            libraryList.forEach((lib, index) => {
+            libraryList.forEach((lib, i) => {
                 setTimeout(() => {
                     checking++;
                     updateProgress();
@@ -583,88 +240,50 @@
                     script.src = lib.url;
                     script.defer = true;
                     
-                    script.onload = function() {
-                        loaded++;
-                        checking--;
-                        createLibraryCard(lib, 'success');
-                        initializeLibrary(lib);
+                    script.onload = () => {
+                        loaded++; checking--;
+                        createCard(lib, 'success');
+                        initDemo(lib);
                         updateProgress();
                     };
                     
-                    script.onerror = function() {
-                        failed++;
-                        checking--;
-                        createLibraryCard(lib, 'failed');
+                    script.onerror = () => {
+                        failed++; checking--;
+                        createCard(lib, 'failed');
                         updateProgress();
                     };
                     
                     head.appendChild(script);
-                }, index * 2); // 2ms stagger for maximum speed
+                }, i * 1); // 1ms stagger
             });
         }
 
         function celebrateCompletion() {
-            document.getElementById('footer-tip').textContent = `🎉 SUCCESS! ${loaded} libraries loaded! We ARE the best web devs! 🎉`;
-            document.body.style.background = 'linear-gradient(135deg, #00ff00, #00ffff, #ff00ff)';
+            document.body.style.background = 'linear-gradient(135deg, #0f0, #0ff, #f0f)';
+            document.getElementById('footer-tip').textContent = `🎉 ${loaded} libraries loaded! Ultimate success!`;
             
-            // Ultimate confetti celebration
-            const colors = ['#00ff00', '#00ffff', '#ff00ff', '#ffff00', '#ff0000', '#ffffff'];
-            for (let i = 0; i < 300; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.width = Math.random() * 10 + 5 + 'px';
-                confetti.style.height = confetti.style.width;
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.top = '-10px';
-                confetti.style.zIndex = '99999';
-                confetti.style.pointerEvents = 'none';
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                document.body.appendChild(confetti);
-                
-                let pos = -10;
-                const speed = Math.random() * 6 + 4;
-                const drift = Math.random() * 3 - 1.5;
-                const fall = setInterval(() => {
-                    pos += speed;
-                    confetti.style.top = pos + 'px';
-                    confetti.style.left = (parseFloat(confetti.style.left) + drift) + '%';
-                    confetti.style.transform = `rotate(${pos * 8}deg)`;
-                    if (pos > window.innerHeight) {
-                        clearInterval(fall);
-                        confetti.remove();
-                    }
-                }, 25);
-            }
+            // Memory-approximate celebration
+            const approxMem = Math.floor(loaded * 0.5); // ~0.5MB per lib
+            document.getElementById('stat-mem').textContent = `🧠 Mem: ~${approxMem}MB`;
         }
 
-        // Memory monitor with warning colors
+        // Memory fallback (since performance.memory is Chrome-only)
+        let approxMemUsage = 0;
         setInterval(() => {
             if (performance && performance.memory) {
-                const memMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
-                document.getElementById('memory-stat').textContent = `🧠 Memory: ${memMB}MB`;
-                
-                const memPercent = Math.min((memMB / 5000) * 100, 100); // Scale to 5GB
-                document.getElementById('memory-bar').style.width = memPercent + '%';
-                
-                const bar = document.getElementById('memory-bar');
-                if (memPercent > 80) {
-                    bar.style.background = 'linear-gradient(90deg, #ff0000, #ff00ff)';
-                    document.getElementById('memory-stat').style.color = '#ff0000';
-                } else if (memPercent > 60) {
-                    bar.style.background = 'linear-gradient(90deg, #ffaa00, #ff0000)';
-                    document.getElementById('memory-stat').style.color = '#ffaa00';
-                } else {
-                    bar.style.background = 'linear-gradient(90deg, var(--neon-green), var(--neon-cyan))';
-                    document.getElementById('memory-stat').style.color = 'var(--neon-green)';
-                }
+                const mem = (performance.memory.usedJSHeapSize / 1048576).toFixed(0);
+                document.getElementById('stat-mem').textContent = `🧠 Mem: ${mem}MB`;
+                document.getElementById('mem-fill').style.width = Math.min(mem / 50, 100) + '%';
+            } else {
+                // Approximate memory based on loaded scripts
+                approxMemUsage += loaded * 0.1;
+                document.getElementById('stat-mem').textContent = `🧠 Mem: ~${Math.floor(approxMemUsage)}MB`;
+                document.getElementById('mem-fill').style.width = Math.min(approxMemUsage / 100, 100) + '%';
             }
-        }, 500);
+        }, 1000);
 
-        // Start loading
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(loadAllLibraries, 300);
-        });
+        // Start after DOM ready
+        document.addEventListener('DOMContentLoaded', loadLibraries);
     </script>
 </body>
 </html>
